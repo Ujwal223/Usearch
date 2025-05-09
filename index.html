@@ -6,6 +6,7 @@
     <title>USearch</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 </head>
 <body>
     <header>
@@ -13,16 +14,14 @@
         <button class="menu-toggle" id="menuToggleBtn"><i class="material-icons">menu</i></button>
     </header>
     <main>
-        <div class="mascot"><i class="material-icons" style="color: #4CAF50;">search</i></div>
+        <div class="mascot">USearch</div>
         <form class="search-container" action="https://duckduckgo.com/" method="get">
+            <div class="search-engine-toggle" id="searchEngineToggle">
+                <img src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=16" alt="Search Engine">
+            </div>
             <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo...">
             <button type="submit" class="search-button" id="searchBtn"><i class="material-icons">search</i></button>
-            <div class="search-engine-dropdown" id="engineDropdown">
-                <div class="search-engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/">DuckDuckGo</div>
-                <div class="search-engine-option" data-engine="bing" data-url="https://www.bing.com/search">Bing</div>
-                <div class="search-engine-option" data-engine="yahoo" data-url="https://search.yahoo.com/search">Yahoo</div>
-                <div class="search-engine-option" id="addCustom">Add Custom</div>
-            </div>
+            <div class="search-engine-dropdown" id="engineDropdown"></div>
         </form>
         <div class="tools" id="toolsBar"></div>
     </main>
@@ -39,6 +38,8 @@
                 <ul>
                     <li><a href="https://reddit.com"><img src="https://www.google.com/s2/favicons?domain=reddit.com&sz=16"> Reddit</a></li>
                     <li><a href="https://facebook.com"><img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=16"> Facebook</a></li>
+                    <li><a href="https://twitter.com"><img src="https://www.google.com/s2/favicons?domain=twitter.com&sz=16"> Twitter</a></li>
+                    <li><a href="https://linkedin.com"><img src="https://www.google.com/s2/favicons?domain=linkedin.com&sz=16"> LinkedIn</a></li>
                 </ul>
             </div>
             <div class="tool-category">
@@ -46,6 +47,14 @@
                 <ul>
                     <li><a href="https://google.com/lens"><img src="https://www.google.com/s2/favicons?domain=google.com&sz=16"> Google Lens</a></li>
                     <li><a href="https://blogger.com"><img src="https://www.google.com/s2/favicons?domain=blogger.com&sz=16"> Blogger</a></li>
+                    <li><a href="https://github.com"><img src="https://www.google.com/s2/favicons?domain=github.com&sz=16"> GitHub</a></li>
+                </ul>
+            </div>
+            <div class="tool-category">
+                <h3>Search</h3>
+                <ul>
+                    <li><a href="https://duckduckgo.com"><img src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=16"> DuckDuckGo</a></li>
+                    <li><a href="https://bing.com"><img src="https://www.google.com/s2/favicons?domain=bing.com&sz=16"> Bing</a></li>
                 </ul>
             </div>
         </div>
@@ -57,11 +66,17 @@
             </div>
             <div class="setting">
                 <label>Default Search Provider:</label>
-                <select id="defaultSearchProvider">
-                    <option value="duckduckgo">DuckDuckGo</option>
-                    <option value="bing">Bing</option>
-                    <option value="yahoo">Yahoo</option>
-                </select>
+                <select id="defaultSearchProvider"></select>
+            </div>
+            <div class="setting">
+                <label>Custom Search Engine:</label>
+                <button id="addCustomSearchBtn">Add Custom Search Engine</button>
+            </div>
+            <div id="addCustomSearchForm" style="display: none;">
+                <input type="text" id="customSearchName" placeholder="Name">
+                <input type="text" id="customSearchUrl" placeholder="Search URL (e.g., https://example.com/search)">
+                <input type="text" id="customSearchQuery" placeholder="Query Parameter (e.g., q)">
+                <button id="saveCustomSearchBtn">Save</button>
             </div>
             <div class="setting">
                 <label>Default Theme:</label>
@@ -71,10 +86,16 @@
                 </select>
             </div>
             <div class="setting">
+                <label>Add Icons From:</label>
+                <select id="addIconLocation">
+                    <option value="sidebar">Sidebar</option>
+                    <option value="quickaccess">Quick Access</option>
+                </select>
+            </div>
+            <div class="setting" id="addIconSetting">
                 <label>Icons Below Search Bar:</label>
                 <div id="iconList"></div>
                 <button id="addIconBtn">Add Icon</button>
-                <button id="removeIconsBtn">Remove All Icons</button>
             </div>
             <div id="addIconForm" style="display: none;">
                 <input type="text" id="siteName" placeholder="Site Name">
@@ -87,3 +108,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+
