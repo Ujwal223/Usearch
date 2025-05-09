@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,19 +14,23 @@
         <button class="menu-toggle" id="menuToggleBtn"><i class="material-icons">menu</i></button>
     </header>
     <main>
-        <div class="mascot" id="logo">USearch</div>
+        <div class="mascot">USearch</div>
         <form class="search-container" action="https://duckduckgo.com/" method="get">
             <div class="search-engine-toggle" id="searchEngineToggle">
-                <img src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=32" alt="Search Engine">
+                <img src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=32" alt="DuckDuckGo">
             </div>
             <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo...">
             <button type="submit" class="search-button" id="searchBtn"><i class="material-icons">search</i></button>
-            <div class="search-engine-dropdown" id="engineDropdown"></div>
-            <div class="logo-dropdown" id="logoDropdown" style="display: none;"></div>
+            <div class="search-engine-dropdown" id="engineDropdown" style="display: none;"></div>
         </form>
         <div class="tools" id="toolsBar"></div>
+        <div class="history-section">
+            <h3>Recent Searches</h3>
+            <div id="historyList"></div>
+            <button id="clearHistoryBtn">Clear History</button>
+        </div>
     </main>
-    <div class="sidebar" id="sidebar">
+    <div class="sidebar" id="sidebar" style="display: none;">
         <button class="close-btn" id="closeSidebarBtn"><i class="material-icons">close</i></button>
         <div class="sidebar-nav">
             <button class="nav-btn active" data-section="tools">Tools</button>
@@ -40,7 +44,6 @@
                     <li><a href="https://reddit.com"><img src="https://www.google.com/s2/favicons?domain=reddit.com&sz=16"> Reddit</a></li>
                     <li><a href="https://facebook.com"><img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=16"> Facebook</a></li>
                     <li><a href="https://twitter.com"><img src="https://www.google.com/s2/favicons?domain=twitter.com&sz=16"> Twitter</a></li>
-                    <li><a href="https://linkedin.com"><img src="https://www.google.com/s2/favicons?domain=linkedin.com&sz=16"> LinkedIn</a></li>
                 </ul>
             </div>
             <div class="tool-category">
@@ -63,7 +66,7 @@
             <h2>Settings</h2>
             <div class="setting">
                 <label for="accentColor">Accent Color:</label>
-                <input type="color" id="accentColor" name="accentColor" value="#888888">
+                <input type="color" id="accentColor" name="accentColor" value="#4CAF50">
             </div>
             <div class="setting">
                 <label>Default Search Provider:</label>
@@ -76,6 +79,7 @@
             <div id="addCustomSearchForm" style="display: none;">
                 <input type="text" id="customSearchName" placeholder="Name">
                 <input type="text" id="customSearchUrl" placeholder="Search URL (e.g., https://example.com/search)">
+                <input type="text" id="customSearchQuery" placeholder="Query Parameter (e.g., q)">
                 <button id="saveCustomSearchBtn">Save</button>
             </div>
             <div class="setting">
@@ -85,12 +89,6 @@
                     <option value="light">Light</option>
                 </select>
             </div>
-            <div class="setting">
-                <label>Add Icons From:</label>
-                <select id="addIconLocation">
-                    <option value="quickaccess">Quick Access</option>
-                </select>
-            </div>
         </div>
     </div>
     <footer>© 2025 Ujwal. All rights reserved.</footer>
@@ -98,4 +96,4 @@
 </body>
 </html>
 
-Enter file contents here
+
