@@ -10,19 +10,21 @@ This lightweight, user-friendly, and modern tool collects **NO data at all**, en
 
 ## 🎉 Features That Make USearch Awesome
 
-- ** 🔐 No DATA Collection**
+- **🔐 No DATA Collection**   
 - **🔍 Customizable Search Engine**   
 - **⚡ Quick Access Toolbar**  
 - **🖌️ Theme Toggle (Dark/Light)**  
-  - **📋 Sidebar Tools**  
-  - **🎨 Accent Color Customization**  
+- **📋 Sidebar Tools**  
+- **🎨 Accent Color Customization**  
 ---
 
 ## 🛠️ How to Set USearch as Your Startup Page
 
+
 Make USearch the first thing you see when you open your browser! Follow these steps for your browser of choice:
 
-## 🌐 Chromium-Based Browsers (Google Chrome, Microsoft Edge, Opera, etc.)
+ 🌐 Chromium-Based Browsers (Google Chrome, Microsoft Edge, Opera, etc.)
+
 1. Open your browser.
 2. Click the three-dot menu (⋮) in the top-right corner and select **Settings**.
 3. Look for the **On startup** section.
@@ -31,7 +33,9 @@ Make USearch the first thing you see when you open your browser! Follow these st
 6. Enter the URL: https://usearch.netlify.app/
 7. Click **Add** or **OK**, then restart your browser. Voilà! 🚀
 
-## 🦊 Firefox
+
+ 🦊 Firefox
+
 1. Open Firefox.
 2. Click the three-line menu (≡) in the top-right corner and select **Settings**.
 3. Go to the **Home** tab.
@@ -41,12 +45,11 @@ Make USearch the first thing you see when you open your browser! Follow these st
 7. Close the settings tab, and you're all set! 🎉
 
 ---
-
 ## 👨‍💻 Developer Information
 
 *USearch* was crafted with love by:  
 **Ujwal Chapagain**  
-📧 Email: [notujwal@proton.me]
+ [notujwal@proton.me]
 
 Feel free to explore and contribute to the project under the license below! 😊
 
