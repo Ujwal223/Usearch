@@ -1,0 +1,431 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Startup Page</title>
+<style>
+:root {
+    --bg-color: #121212;
+    --bg-color-secondary: #1e1e1e;
+    --text-color: #e0e0e0;
+    --accent-color: #2196f3;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+body.light {
+    --bg-color: #ffffff;
+    --bg-color-secondary: #f0f0f0;
+    --text-color: #000000;
+}
+#header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+#toggleSidebar {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
+}
+#search-section {
+    margin: 20px auto;
+    text-align: center;
+}
+#searchForm {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    overflow: hidden;
+}
+#searchForm select, 
+#searchForm input[type="text"] {
+    padding: 10px;
+    border: none;
+    background: var(--bg-color-secondary);
+    color: var(--text-color);
+    font-size: 16px;
+    outline: none;
+}
+#searchForm select {
+    width: 120px;
+}
+#searchForm input {
+    flex: 1;
+    min-width: 100px;
+}
+#searchForm button {
+    padding: 10px;
+    border: none;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+#searchForm button:hover {
+    opacity: 0.9;
+}
+#quickLinks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 20px;
+    padding: 10px;
+    margin: 20px;
+    justify-items: center;
+}
+.quick-item {
+    text-align: center;
+    text-decoration: none;
+    color: var(--accent-color);
+}
+.quick-item img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+}
+.quick-item .quick-label {
+    font-size: 14px;
+    color: var(--text-color);
+}
+.quick-item:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+.quick-add {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color-secondary);
+    color: var(--accent-color);
+    font-size: 32px;
+    cursor: pointer;
+    border: 2px dashed var(--accent-color);
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+.quick-add:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: var(--bg-color-secondary);
+    padding: 10px 10px 50px 10px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    transition: left 0.3s;
+    overflow-y: auto;
+    z-index: 1000;
+}
+#sidebar.open {
+    left: 0;
+}
+.category {
+    margin-bottom: 20px;
+}
+.category-header {
+    display: flex;
+    align-items: center;
+}
+.category-header h3 {
+    margin: 0;
+    flex-grow: 1;
+    color: var(--text-color);
+}
+.add-link {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
+}
+.links-list {
+    list-style: none;
+    padding-left: 10px;
+    margin: 5px 0;
+}
+.links-list li {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+.links-list li a {
+    flex-grow: 1;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+.links-list li a:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+.edit, .delete {
+    margin-left: 8px;
+    cursor: pointer;
+}
+.delete {
+    color: #e53935;
+}
+.settings {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+}
+.settings div {
+    margin: 10px 0;
+}
+.color-option {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.color-option.selected {
+    border: 2px solid var(--text-color);
+}
+#themeToggleLabel {
+    cursor: pointer;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+<div id="header">
+    <button id="toggleSidebar">&#9776;</button>
+</div>
+<div id="search-section">
+    <form id="searchForm" target="_blank">
+        <select id="searchEngineSelect">
+            <option value="DuckDuckGo">DuckDuckGo</option>
+            <option value="Google">Google</option>
+            <option value="Bing">Bing</option>
+            <option value="Yahoo">Yahoo</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button type="submit" id="searchBtn">Search</button>
+    </form>
+</div>
+<div id="quickLinks"></div>
+<div id="sidebar">
+    <div id="categoriesContainer"></div>
+    <div class="settings">
+        <div>
+            <label id="themeToggleLabel"><input type="checkbox" id="themeToggle"> Light Mode</label>
+        </div>
+        <div>
+            Accent Color:
+            <div id="accentColors">
+                <span class="color-option" data-color="#2196f3" style="background:#2196f3;"></span>
+                <span class="color-option" data-color="#e91e63" style="background:#e91e63;"></span>
+                <span class="color-option" data-color="#ff9800" style="background:#ff9800;"></span>
+                <span class="color-option" data-color="#4caf50" style="background:#4caf50;"></span>
+                <span class="color-option" data-color="#9c27b0" style="background:#9c27b0;"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+(function() {
+    const STORAGE_KEYS = {
+        quickLinks: 'quickLinks',
+        categories: 'categoriesLinks',
+        searchEngine: 'searchEngine',
+        theme: 'theme',
+        accent: 'accentColor'
+    };
+    const defaultQuickLinks = [
+        { name: 'Gmail', url: 'https://mail.google.com' },
+        { name: 'Facebook', url: 'https://www.facebook.com' },
+        { name: 'YouTube', url: 'https://www.youtube.com' },
+        { name: 'GitHub', url: 'https://github.com' }
+    ];
+    const defaultCategories = {
+        'Emails': [
+            { name: 'Gmail', url: 'https://mail.google.com' },
+            { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' }
+        ],
+        'Social': [
+            { name: 'Facebook', url: 'https://www.facebook.com' },
+            { name: 'Twitter', url: 'https://www.twitter.com' }
+        ],
+        'Media': [
+            { name: 'YouTube', url: 'https://www.youtube.com' },
+            { name: 'Vimeo', url: 'https://vimeo.com' }
+        ],
+        'Shopping': [
+            { name: 'Amazon', url: 'https://www.amazon.com' },
+            { name: 'eBay', url: 'https://www.ebay.com' }
+        ],
+        'Design': [
+            { name: 'Dribbble', url: 'https://dribbble.com' },
+            { name: 'Behance', url: 'https://www.behance.net' }
+        ],
+        'Tools': [
+            { name: 'GitHub', url: 'https://github.com' },
+            { name: 'StackOverflow', url: 'https://stackoverflow.com' }
+        ]
+    };
+    let quickLinks = JSON.parse(localStorage.getItem(STORAGE_KEYS.quickLinks) || 'null');
+    if (!quickLinks) {
+        quickLinks = defaultQuickLinks;
+        localStorage.setItem(STORAGE_KEYS.quickLinks, JSON.stringify(quickLinks));
+    }
+    let categories = JSON.parse(localStorage.getItem(STORAGE_KEYS.categories) || 'null');
+    if (!categories) {
+        categories = defaultCategories;
+        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories));
+    }
+    const savedTheme = localStorage.getItem(STORAGE_KEYS.theme) || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('themeToggle').checked = true;
+    }
+    const savedAccent = localStorage.getItem(STORAGE_KEYS.accent);
+    if (savedAccent) {
+        document.documentElement.style.setProperty('--accent-color', savedAccent);
+    }
+    const engines = {
+        'DuckDuckGo': { action: 'https://duckduckgo.com/', param: 'q', placeholder: 'Search DuckDuckGo...' },
+        'Google':    { action: 'https://www.google.com/search', param: 'q', placeholder: 'Search Google...' },
+        'Bing':      { action: 'https://www.bing.com/search', param: 'q', placeholder: 'Search Bing...' },
+        'Yahoo':     { action: 'https://search.yahoo.com/search', param: 'p', placeholder: 'Search Yahoo...' }
+    };
+    const searchForm = document.getElementById('searchForm');
+    const searchSelect = document.getElementById('searchEngineSelect');
+    const searchInput = document.getElementById('searchInput');
+    const savedEngine = localStorage.getItem(STORAGE_KEYS.searchEngine) || 'Google';
+    searchSelect.value = savedEngine;
+    function setSearchEngine(engine) {
+        const config = engines[engine];
+        searchForm.action = config.action;
+        searchInput.name = config.param;
+        searchInput.placeholder = config.placeholder;
+        localStorage.setItem(STORAGE_KEYS.searchEngine, engine);
+    }
+    setSearchEngine(savedEngine);
+    searchSelect.addEventListener('change', () => setSearchEngine(searchSelect.value));
+    const quickContainer = document.getElementById('quickLinks');
+    function renderQuickLinks() {
+        quickContainer.innerHTML = '';
+        quickLinks.forEach(link => {
+            const a = document.createElement('a');
+            a.className = 'quick-item';
+            a.href = link.url;
+            a.target = '_blank';
+            let domain;
+            try { domain = new URL(link.url).hostname; } catch(e) { domain = link.url; }
+            const img = document.createElement('img');
+            img.src = 'https://www.google.com/s2/favicons?domain=' + domain;
+            img.alt = link.name;
+            img.onerror = function() { this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIg...'; };
+            a.appendChild(img);
+            const label = document.createElement('div');
+            label.className = 'quick-label';
+            label.textContent = link.name;
+            a.appendChild(label);
+            quickContainer.appendChild(a);
+        });
+        const addDiv = document.createElement('div');
+        addDiv.className = 'quick-add';
+        addDiv.textContent = '+';
+        quickContainer.appendChild(addDiv);
+        addDiv.onclick = () => {
+            const name = prompt('Enter name for the new link:');
+            if (!name) return;
+            let url = prompt(`Enter URL for ${name}:`);
+            if (!url) return;
+            if (!/^https?:\/\//i.test(url)) url = 'http://' + url;
+            quickLinks.push({ name, url });
+            localStorage.setItem(STORAGE_KEYS.quickLinks, JSON.stringify(quickLinks));
+            renderQuickLinks();
+        };
+    }
+    renderQuickLinks();
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('toggleSidebar').addEventListener('click', () => sidebar.classList.toggle('open'));
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+        container.innerHTML = '';
+        Object.keys(categories).forEach(cat => {
+            const catDiv = document.createElement('div'); catDiv.className='category';
+            const headerDiv = document.createElement('div'); headerDiv.className='category-header';
+            const h3 = document.createElement('h3'); h3.textContent=cat; headerDiv.appendChild(h3);
+            const addBtn=document.createElement('button'); addBtn.className='add-link'; addBtn.textContent='+'; headerDiv.appendChild(addBtn);
+            catDiv.appendChild(headerDiv);
+            const ul=document.createElement('ul'); ul.className='links-list';
+            categories[cat].forEach((link, idx) => {
+                const li=document.createElement('li');
+                const a=document.createElement('a'); a.href=link.url; a.target='_blank'; a.textContent=link.name;
+                li.appendChild(a);
+                const edit=document.createElement('span'); edit.className='edit'; edit.textContent='✎'; li.appendChild(edit);
+                const del=document.createElement('span'); del.className='delete'; del.textContent='✖'; li.appendChild(del);
+                edit.onclick=()=>{
+                    const newName=prompt('Edit name:', link.name); if(newName){
+                        let newUrl=prompt('Edit URL for '+newName+':', link.url); if(newUrl){ if(!/^https?:\/\//i.test(newUrl)) newUrl='http://'+newUrl;
+                            categories[cat][idx]={ name:newName, url:newUrl };
+                            localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories)); renderCategories();
+                        }
+                    }
+                };
+                del.onclick=()=>{
+                    if(confirm('Delete this link?')){
+                        categories[cat].splice(idx,1);
+                        localStorage.setItem(STORAGE_KEYS.categories,JSON.stringify(categories)); renderCategories();
+                    }
+                };
+                ul.appendChild(li);
+            });
+            addBtn.onclick = () => {
+                const newName = prompt('New link name:'); if(!newName) return;
+                let newUrl = prompt(`URL for ${newName}:`); if(!newUrl) return;
+                if(!/^https?:\/\//i.test(newUrl)) newUrl='http://'+newUrl;
+                categories[cat].push({ name:newName, url:newUrl });
+                localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories)); renderCategories();
+            };
+            catDiv.appendChild(ul);
+            container.appendChild(catDiv);
+        });
+    }
+    renderCategories();
+    document.getElementById('themeToggle').addEventListener('change', function() {
+        if (this.checked) { document.body.classList.add('light'); localStorage.setItem(STORAGE_KEYS.theme, 'light'); }
+        else { document.body.classList.remove('light'); localStorage.setItem(STORAGE_KEYS.theme, 'dark'); }
+    });
+    document.querySelectorAll('.color-option').forEach(option => {
+        const color = option.getAttribute('data-color');
+        if (color.trim() === (localStorage.getItem(STORAGE_KEYS.accent) || getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim())) {
+            option.classList.add('selected');
+        }
+        option.addEventListener('click', () => {
+            document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+            option.classList.add('selected');
+            document.documentElement.style.setProperty('--accent-color', color);
+            localStorage.setItem(STORAGE_KEYS.accent, color);
+        });
+    });
+})();
+</script>
+</body>
+</html>
