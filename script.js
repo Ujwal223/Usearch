@@ -1,5 +1,3 @@
-// script.js
-
 // Theme toggle
 const themeBtn = document.getElementById('themeToggleBtn');
 const htmlEl = document.documentElement;
@@ -45,6 +43,10 @@ searchBtn.addEventListener('touchend', (e) => {
     }
 });
 
+searchBtn.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+});
+
 document.addEventListener('click', (e) => {
     if (!dropdown.contains(e.target) && e.target !== searchBtn) {
         dropdown.style.display = 'none';
@@ -52,15 +54,18 @@ document.addEventListener('click', (e) => {
 });
 
 document.querySelectorAll('.search-engine-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-        const form = document.querySelector('.search-container');
-        form.action = opt.dataset.url;
-        document.querySelector('.search-bar').placeholder = `Search with ${opt.dataset.engine.charAt(0).toUpperCase() + opt.dataset.engine.slice(1)}...`;
-        dropdown.style.display = 'none';
-    });
+    if (opt.id !== 'addCustom') {
+        opt.addEventListener('click', () => {
+            const form = document.querySelector('.search-container');
+            form.action = opt.dataset.url;
+            document.querySelector('.search-bar').placeholder = `Search with ${opt.dataset.engine.charAt(0).toUpperCase() + opt.dataset.engine.slice(1)}...`;
+            dropdown.style.display = 'none';
+        });
+    }
+    // Note: "Add Custom" functionality can be added here if specified
 });
 
-// Tool list with actual favicons
+// Tool list with circular favicons and "Add" button
 const tools = [
     { name: "YouTube", url: "https://youtube.com" },
     { name: "Reddit", url: "https://reddit.com" },
@@ -80,6 +85,13 @@ tools.forEach(t => {
     a.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" width="24" height="24" alt="${t.name}" title="${t.name}">`;
     toolsBar.appendChild(a);
 });
+
+// Add "Add" button
+const addBtn = document.createElement('button');
+addBtn.className = 'add-tool';
+addBtn.innerHTML = '+';
+addBtn.title = 'Add new tool';
+toolsBar.appendChild(addBtn);
 
 // Accent color picker
 const accentPicker = document.getElementById('accentColor');
