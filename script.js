@@ -8,7 +8,7 @@ function setTheme(theme) {
     localStorage.setItem('theme', theme);
 }
 
-const savedTheme = localStorage.getItem('theme') || 'dark';
+const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light as per user request
 setTheme(savedTheme);
 
 themeBtn.addEventListener('click', () => {
@@ -55,33 +55,33 @@ navBtns.forEach(btn => {
     });
 });
 
-// Logo dropdown for search engines
-const logo = document.getElementById('logo');
-const logoDropdown = document.getElementById('logoDropdown');
+// Search engine dropdown on DuckDuckGo logo click
+const searchEngineToggle = document.getElementById('searchEngineToggle');
+const engineDropdown = document.getElementById('engineDropdown');
 
 let searchEngines = [
     { name: "duckduckgo", url: "https://duckduckgo.com/", query: "q" },
     { name: "bing", url: "https://www.bing.com/search", query: "q" },
-    { name: "yahoo", url: "https://search.yahoo.com/search", query: "p" }
+    { name: "yahoo", url: "https://search.yahoo.com/search", query: "p" },
+    { name: "google", url: "https://www.google.com/search", query: "q" }
 ];
 
 const customEngines = JSON.parse(localStorage.getItem('customEngines')) || [];
 searchEngines = [...searchEngines, ...customEngines];
 
 function loadSearchEngines() {
-    logoDropdown.innerHTML = '';
+    engineDropdown.innerHTML = '';
     const defaultSearchProviderSelect = document.getElementById('defaultSearchProvider');
     defaultSearchProviderSelect.innerHTML = '';
     searchEngines.forEach(engine => {
-        // Dropdown for logo
         const option = document.createElement('div');
         option.className = 'search-engine-option';
         option.dataset.engine = engine.name;
         option.dataset.url = engine.url;
-        option.dataset.query = engine.query || 'q'; // Default to 'q' if not specified
+        option.dataset.query = engine.query || 'q';
         option.dataset.icon = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
         option.innerHTML = `<img src="${option.dataset.icon}" alt="${engine.name}">`;
-        logoDropdown.appendChild(option);
+        engineDropdown.appendChild(option);
         option.addEventListener('click', () => {
             const form = document.querySelector('.search-container');
             form.action = engine.url;
@@ -89,11 +89,10 @@ function loadSearchEngines() {
             document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
             document.querySelector('.search-engine-toggle img').src = option.dataset.icon;
             localStorage.setItem('defaultSearchEngine', engine.name);
-            logoDropdown.style.display = 'none';
+            engineDropdown.style.display = 'none';
             defaultSearchProviderSelect.value = engine.name;
         });
 
-        // Dropdown for settings
         const selectOption = document.createElement('option');
         selectOption.value = engine.name;
         selectOption.textContent = engine.name.charAt(0).toUpperCase() + engine.name.slice(1);
@@ -112,13 +111,13 @@ function loadSearchEngines() {
 
 loadSearchEngines();
 
-logo.addEventListener('click', () => {
-    logoDropdown.style.display = logoDropdown.style.display === 'block' ? 'none' : 'block';
+searchEngineToggle.addEventListener('click', () => {
+    engineDropdown.style.display = engineDropdown.style.display === 'block' ? 'none' : 'block';
 });
 
 document.addEventListener('click', (e) => {
-    if (!logoDropdown.contains(e.target) && e.target !== logo) {
-        logoDropdown.style.display = 'none';
+    if (!engineDropdown.contains(e.target) && e.target !== searchEngineToggle) {
+        engineDropdown.style.display = 'none';
     }
 });
 
@@ -127,6 +126,7 @@ const addCustomSearchBtn = document.getElementById('addCustomSearchBtn');
 const addCustomSearchForm = document.getElementById('addCustomSearchForm');
 const customSearchNameInput = document.getElementById('customSearchName');
 const customSearchUrlInput = document.getElementById('customSearchUrl');
+const customSearchQueryInput = document.getElementById('customSearchQuery');
 const saveCustomSearchBtn = document.getElementById('saveCustomSearchBtn');
 
 addCustomSearchBtn.addEventListener('click', () => {
@@ -136,14 +136,23 @@ addCustomSearchBtn.addEventListener('click', () => {
 saveCustomSearchBtn.addEventListener('click', () => {
     const name = customSearchNameInput.value.trim().toLowerCase();
     const url = customSearchUrlInput.value.trim();
-    if (name && url) {
-        customEngines.push({ name, url, query: 'q' }); // Default query parameter 'q'
-        localStorage.setItem('customEngines', JSON.stringify(customEngines));
-        searchEngines = [...searchEngines.filter(e => !customEngines.some(ce => ce.name === e.name)), ...customEngines];
-        loadSearchEngines();
-        addCustomSearchForm.style.display = 'none';
-        customSearchNameInput.value = '';
-        customSearchUrlInput.value = '';
+    const query = customSearchQueryInput.value.trim() || 'q';
+    try {
+        new URL(url); // Validate URL
+        if (name && url) {
+            customEngines.push({ name, url, query });
+            localStorage.setItem('customEngines', JSON.stringify(customEngines));
+            searchEngines = [...searchEngines.filter(e => !customEngines.some(ce => ce.name === e.name)), ...customEngines];
+            loadSearchEngines();
+            addCustomSearchForm.style.display = 'none';
+            customSearchNameInput.value = '';
+            customSearchUrlInput.value = '';
+            customSearchQueryInput.value = '';
+        } else {
+            alert('Please fill in all required fields.');
+        }
+    } catch (e) {
+        alert('Invalid URL. Please enter a valid URL.');
     }
 });
 
@@ -166,10 +175,8 @@ const predefinedTools = [
     { name: "YouTube", url: "https://youtube.com" },
     { name: "Reddit", url: "https://reddit.com" },
     { name: "Twitter", url: "https://twitter.com" },
-    { name: "Wikipedia", url: "https://wikipedia.org" },
     { name: "StackOverflow", url: "https://stackoverflow.com" },
     { name: "GitHub", url: "https://github.com" },
-    { name: "LinkedIn", url: "https://linkedin.com" },
     { name: "Facebook", url: "https://facebook.com" }
 ];
 
@@ -203,25 +210,69 @@ function loadIcons() {
         toolsBar.appendChild(container);
     });
 
-    const addIconLocation = localStorage.getItem('addIconLocation') || 'quickaccess';
-    if (addIconLocation === 'quickaccess') {
-        const addBtn = document.createElement('button');
-        addBtn.className = 'add-tool';
-        addBtn.innerHTML = '+';
-        addBtn.addEventListener('click', () => {
-            const name = prompt('Enter site name:');
-            const url = prompt('Enter site URL:');
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-tool';
+    addBtn.innerHTML = '+';
+    addBtn.addEventListener('click', () => {
+        const name = prompt('Enter site name:');
+        const url = prompt('Enter site URL:');
+        try {
+            new URL(url); // Validate URL
             if (name && url) {
                 savedIcons.push({ name, url });
                 localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
                 loadIcons();
+            } else {
+                alert('Please fill in all required fields.');
             }
-        });
-        toolsBar.appendChild(addBtn);
-    }
+        } catch (e) {
+            alert('Invalid URL. Please enter a valid URL.');
+        }
+    });
+    toolsBar.appendChild(addBtn);
 }
 
 loadIcons();
+
+// History feature
+const historyList = document.getElementById('historyList');
+const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+function loadHistory() {
+    historyList.innerHTML = '';
+    searchHistory.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.textContent = item;
+        historyList.appendChild(div);
+    });
+}
+
+function addToHistory(query) {
+    if (query && !searchHistory.includes(query)) {
+        searchHistory.unshift(query);
+        if (searchHistory.length > 5) searchHistory.pop(); // Limit to 5 recent searches
+        localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+        loadHistory();
+    }
+}
+
+document.querySelector('.search-container').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const query = document.querySelector('.search-bar').value.trim();
+    if (query) {
+        addToHistory(query);
+        window.location.href = `${e.target.action}?${e.target.querySelector('input').name}=${encodeURIComponent(query)}`;
+    }
+});
+
+clearHistoryBtn.addEventListener('click', () => {
+    searchHistory = [];
+    localStorage.removeItem('searchHistory');
+    loadHistory();
+});
+
+loadHistory();
 
 // Accent color picker
 const accentPicker = document.getElementById('accentColor');
@@ -230,6 +281,6 @@ accentPicker.addEventListener('input', (e) => {
     localStorage.setItem('accentColor', e.target.value);
 });
 
-const savedAccentColor = localStorage.getItem('accentColor') || '#888888';
+const savedAccentColor = localStorage.getItem('accentColor') || '#4CAF50';
 document.documentElement.style.setProperty('--accent-color', savedAccentColor);
 accentPicker.value = savedAccentColor;
