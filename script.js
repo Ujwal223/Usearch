@@ -71,13 +71,16 @@ searchEngines = [...searchEngines, ...customEngines];
 
 function loadSearchEngines() {
     engineDropdown.innerHTML = '';
+    const defaultSearchProviderSelect = document.getElementById('defaultSearchProvider');
+    defaultSearchProviderSelect.innerHTML = '';
     searchEngines.forEach(engine => {
+        // Dropdown for search bar
         const option = document.createElement('div');
         option.className = 'search-engine-option';
         option.dataset.engine = engine.name;
         option.dataset.url = engine.url;
         option.dataset.query = engine.query;
-        option.dataset.icon = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=16`;
+        option.dataset.icon = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
         option.innerHTML = `<img src="${option.dataset.icon}" alt="${engine.name}">`;
         engineDropdown.appendChild(option);
         option.addEventListener('click', () => {
@@ -88,8 +91,24 @@ function loadSearchEngines() {
             document.querySelector('.search-engine-toggle img').src = option.dataset.icon;
             localStorage.setItem('defaultSearchEngine', engine.name);
             engineDropdown.style.display = 'none';
+            defaultSearchProviderSelect.value = engine.name;
         });
+
+        // Dropdown for settings
+        const selectOption = document.createElement('option');
+        selectOption.value = engine.name;
+        selectOption.textContent = engine.name.charAt(0).toUpperCase() + engine.name.slice(1);
+        defaultSearchProviderSelect.appendChild(selectOption);
     });
+
+    const savedSearchEngine = localStorage.getItem('defaultSearchEngine') || 'duckduckgo';
+    defaultSearchProviderSelect.value = savedSearchEngine;
+    const selectedEngine = searchEngines.find(engine => engine.name === savedSearchEngine) || searchEngines[0];
+    const form = document.querySelector('.search-container');
+    form.action = selectedEngine.url;
+    form.querySelector('input').name = selectedEngine.query;
+    document.querySelector('.search-bar').placeholder = `Search with ${selectedEngine.name.charAt(0).toUpperCase() + selectedEngine.name.slice(1)}...`;
+    document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(selectedEngine.url).hostname}&sz=32`;
 }
 
 loadSearchEngines();
@@ -98,7 +117,7 @@ searchEngineToggle.addEventListener('click', () => {
     engineDropdown.style.display = engineDropdown.style.display === 'block' ? 'none' : 'block';
 });
 
-searchBtn.addEventListener('touchstart', (e) => {
+searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
     document.querySelector('.search-container').submit();
 });
@@ -122,11 +141,11 @@ addCustomSearchBtn.addEventListener('click', () => {
 });
 
 saveCustomSearchBtn.addEventListener('click', () => {
-    const name = customSearchNameInput.value.trim();
+    const name = customSearchNameInput.value.trim().toLowerCase();
     const url = customSearchUrlInput.value.trim();
     const query = customSearchQueryInput.value.trim();
     if (name && url && query) {
-        customEngines.push({ name: name.toLowerCase(), url, query });
+        customEngines.push({ name, url, query });
         localStorage.setItem('customEngines', JSON.stringify(customEngines));
         searchEngines = [...searchEngines.filter(e => !customEngines.some(ce => ce.name === e.name)), ...customEngines];
         loadSearchEngines();
@@ -134,6 +153,20 @@ saveCustomSearchBtn.addEventListener('click', () => {
         customSearchNameInput.value = '';
         customSearchUrlInput.value = '';
         customSearchQueryInput.value = '';
+    }
+});
+
+// Search provider selection
+const defaultSearchProviderSelect = document.getElementById('defaultSearchProvider');
+defaultSearchProviderSelect.addEventListener('change', (e) => {
+    const engine = searchEngines.find(se => se.name === e.target.value);
+    if (engine) {
+        const form = document.querySelector('.search-container');
+        form.action = engine.url;
+        form.querySelector('input').name = engine.query;
+        document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
+        document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
+        localStorage.setItem('defaultSearchEngine', engine.name);
     }
 });
 
@@ -288,7 +321,8 @@ addIconBtn.addEventListener('click', () => {
     addIconForm.style.display = 'block';
 });
 
-saveIconBtn.addEventListener('click', () => {
+saveIconBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     const name = siteNameInput.value.trim();
     const url = siteUrlInput.value.trim();
     if (name && url) {
@@ -323,28 +357,3 @@ accentPicker.addEventListener('input', (e) => {
 const savedAccentColor = localStorage.getItem('accentColor') || '#888888';
 document.documentElement.style.setProperty('--accent-color', savedAccentColor);
 accentPicker.value = savedAccentColor;
-
-// Search provider selection
-const defaultSearchProviderSelect = document.getElementById('defaultSearchProvider');
-searchEngines.forEach(engine => {
-    const option = document.createElement('option');
-    option.value = engine.name;
-    option.textContent = engine.name.charAt(0).toUpperCase() + engine.name.slice(1);
-    defaultSearchProviderSelect.appendChild(option);
-});
-
-defaultSearchProviderSelect.addEventListener('change', (e) => {
-    const engine = searchEngines.find(se => se.name === e.target.value);
-    if (engine) {
-        const form = document.querySelector('.search-container');
-        form.action = engine.url;
-        form.querySelector('input').name = engine.query;
-        document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
-        document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=16`;
-        localStorage.setItem('defaultSearchEngine', engine.name);
-    }
-});
-
-const savedSearchEngine = localStorage.getItem('defaultSearchEngine') || 'duckduckgo';
-defaultSearchProviderSelect.value = savedSearchEngine;
-defaultSearchProviderSelect.dispatchEvent(new Event('change'));
