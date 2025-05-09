@@ -58,8 +58,18 @@ header {
 }
 
 .mascot {
+    font-family: 'Pacifico', cursive;
     font-size: 48px;
-    margin: 20px 0;
+    color: #4CAF50; /* Fixed green color */
+    margin-bottom: 20px;
+    text-align: center;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
+    to { text-shadow: 0 0 15px rgba(76, 175, 80, 1); }
 }
 
 main {
@@ -76,52 +86,65 @@ main {
     width: 100%;
     max-width: 600px;
     margin-bottom: 30px;
-    display: flex;
 }
 
 .search-bar {
     width: 100%;
-    padding: 12px 15px;
-    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    padding: 12px 40px 12px 40px;
+    border-radius: var(--border-radius);
     background-color: var(--input-bg);
     border: 2px solid var(--accent-color);
-    border-right: none;
     color: var(--text-color);
     font-size: 16px;
 }
 
-.search-button {
-    width: 50px;
-    height: 46px;
-    background-color: var(--accent-color);
-    border: none;
-    border-radius: 0 var(--border-radius) var(--border-radius) 0;
-    color: white;
-    font-size: 20px;
+.search-engine-toggle {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
-    transition: background-color 0.2s;
 }
 
-.search-button:hover {
-    background-color: var(--accent-hover);
+.search-engine-toggle img {
+    width: 16px;
+    height: 16px;
+}
+
+.search-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 20px;
+    cursor: pointer;
 }
 
 .search-engine-dropdown {
     position: absolute;
-    right: 0;
+    left: 0;
     top: 100%;
     background-color: var(--secondary-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
-    width: 180px;
+    width: 100px;
     display: none;
     z-index: 10;
 }
 
 .search-engine-option {
-    padding: 10px;
+    padding: 5px;
     cursor: pointer;
+    text-align: center;
     transition: background-color 0.2s;
+}
+
+.search-engine-option img {
+    width: 16px;
+    height: 16px;
 }
 
 .search-engine-option:hover {
@@ -136,6 +159,11 @@ main {
     margin-bottom: 50px;
 }
 
+.icon-container {
+    position: relative;
+    display: inline-block;
+}
+
 .tool-icon img {
     border-radius: 50%;
     width: 32px;
@@ -147,6 +175,61 @@ main {
 
 .tool-icon img:hover {
     transform: scale(1.2);
+}
+
+.delete-icon {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.icon-menu {
+    background-color: var(--secondary-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    z-index: 100;
+}
+
+.menu-btn {
+    display: block;
+    width: 100%;
+    padding: 5px 10px;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    text-align: left;
+    cursor: pointer;
+}
+
+.menu-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.add-tool {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.add-tool:hover {
+    background-color: var(--accent-hover);
 }
 
 .sidebar {
@@ -164,7 +247,7 @@ main {
 
 .sidebar.active { right: 0; }
 
-.close-btn {
+.closeeller {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -177,8 +260,10 @@ main {
 
 .sidebar-nav {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-btn {
@@ -188,18 +273,23 @@ main {
     opacity: 0.7;
     font-size: 16px;
     cursor: pointer;
-    padding: 5px;
+    padding: 5px 10px;
+    transition: opacity 0.2s;
 }
 
 .nav-btn.active {
     opacity: 1;
-    text-decoration: underline;
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.nav-btn:hover {
+    opacity: 1;
 }
 
 .tool-category { margin-bottom: 20px; }
-.tool-category h3 { margin-bottom: 10px; padding: 5px; }
+.tool-category h3 { margin-bottom: 10px; padding: 5px 0; font-size: 18px; }
 .tool-category ul { list-style: none; padding: 0; margin: 0; }
-.tool-category li { margin-bottom: 10px; padding: 5px; }
+.tool-category li { margin-bottom: 10px; padding: 5px 0; }
 
 .tool-category a {
     display: flex;
@@ -216,13 +306,17 @@ main {
     background-color: rgba(136, 136, 136, 0.2);
 }
 
-.setting { margin-bottom: 20px; }
-.setting label { display: block; margin-bottom: 5px; }
-.setting select, .setting input[type="color"] { width: 100%; padding: 5px; }
+.setting { margin-bottom: 20px; padding: 10px; border-radius: 5px; }
+.setting label { display: block; margin-bottom: 5px; font-size: 16px; }
+.setting select, .setting input[type="color"], .setting button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid var(--accent-color); background-color: var(--input-bg); color: var(--text-color); }
+.setting button { background-color: var(--accent-color); border: none; cursor: pointer; }
+.setting button:hover { background-color: var(--accent-hover); }
 #iconList { margin: 10px 0; }
-#addIconForm { margin-top: 10px; }
-#addIconForm input { display: block; width: 100%; margin-bottom: 10px; padding: 5px; }
-#addIconForm button { padding: 5px 10px; }
+#iconList .icon-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+#iconList .delete-icon { width: 20px; height: 20px; font-size: 14px; }
+#addIconForm, #addCustomSearchForm { margin-top: 10px; padding: 10px; background-color: var(--input-bg); border-radius: 5px; }
+#addIconForm input, #addCustomSearchForm input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 5px; border: 1px solid var(--accent-color); background-color: var(--bg-color); color: var(--text-color); }
+#addIconForm button, #addCustomSearchForm button { padding: 8px; }
 
 footer {
     text-align: center;
