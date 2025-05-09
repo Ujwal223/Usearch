@@ -16,13 +16,6 @@ themeBtn.addEventListener('click', () => {
     setTheme(current === 'light' ? 'dark' : 'light');
 });
 
-// Theme selection
-const defaultThemeSelect = document.getElementById('defaultTheme');
-defaultThemeSelect.value = savedTheme;
-defaultThemeSelect.addEventListener('change', (e) => {
-    setTheme(e.target.value);
-});
-
 // Sidebar toggle
 const menuBtn = document.getElementById('menuToggleBtn');
 const closeBtn = document.getElementById('closeSidebarBtn');
@@ -227,6 +220,8 @@ function loadIcons() {
         a.addEventListener('click', (e) => {
             if (contextMenu.style.display === 'block') {
                 e.preventDefault();
+            } else if (!e.ctrlKey && !e.metaKey) {
+                window.open(a.href, '_blank');
             }
         });
 
