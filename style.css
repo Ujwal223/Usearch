@@ -233,10 +233,12 @@ main {
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
     transition: right 0.3s ease-in-out;
     z-index: 100;
+    visibility: hidden;
 }
 
 .sidebar.active {
     right: 0;
+    visibility: visible;
 }
 
 .close-btn {
