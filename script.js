@@ -10,9 +10,11 @@ function setTheme(theme) {
 const savedTheme = localStorage.getItem('theme') || 'dark';
 setTheme(savedTheme);
 
-themeBtn.addEventListener('click', () => {
-    const current = htmlEl.getAttribute('data-theme');
-    setTheme(current === 'light' ? 'dark' : 'light');
+// Theme selection
+const defaultThemeSelect = document.getElementById('defaultTheme');
+defaultThemeSelect.value = savedTheme;
+defaultThemeSelect.addEventListener('change', (e) => {
+    setTheme(e.target.value);
 });
 
 // Sidebar toggle
@@ -87,7 +89,7 @@ document.querySelectorAll('.search-engine-option').forEach(opt => {
     }
 });
 
-// Tool list with circular favicons and "Add" button
+// Tool list with favicons
 const tools = [
     { name: "YouTube", url: "https://youtube.com" },
     { name: "Reddit", url: "https://reddit.com" },
@@ -97,23 +99,22 @@ const tools = [
 ];
 
 const toolsBar = document.getElementById('toolsBar');
+const iconList = document.getElementById('iconList');
+let savedIcons = JSON.parse(localStorage.getItem('savedIcons')) || [];
 
-tools.forEach(t => {
-    const a = document.createElement('a');
-    a.href = t.url;
-    a.className = 'tool-icon';
-    a.target = '_blank';
-    const domain = new URL(t.url).hostname;
-    a.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" width="24" height="24" alt="${t.name}" title="${t.name}">`;
-    toolsBar.appendChild(a);
-});
+function loadIcons() {
+    toolsBar.innerHTML = '';
+    savedIcons.forEach(icon => {
+        const a = document.createElement('a');
+        a.href = icon.url;
+        a.className = 'tool-icon';
+        a.target = '_blank';
+        a.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${new URL(icon.url).hostname}&sz=64" width="32" height="32" alt="${icon.name}" title="${icon.name}">`;
+        toolsBar.appendChild(a);
+    });
+}
 
-// Add "Add" button
-const addBtn = document.createElement('button');
-addBtn.className = 'add-tool';
-addBtn.innerHTML = '+';
-addBtn.title = 'Add new tool';
-toolsBar.appendChild(addBtn);
+loadIcons();
 
 // Accent color picker
 const accentPicker = document.getElementById('accentColor');
@@ -122,7 +123,52 @@ accentPicker.addEventListener('input', (e) => {
     localStorage.setItem('accentColor', e.target.value);
 });
 
-// Load saved accent color
 const savedAccentColor = localStorage.getItem('accentColor') || '#888888';
 document.documentElement.style.setProperty('--accent-color', savedAccentColor);
 accentPicker.value = savedAccentColor;
+
+// Search provider selection
+const defaultSearchProviderSelect = document.getElementById('defaultSearchProvider');
+defaultSearchProviderSelect.addEventListener('change', (e) => {
+    const form = document.querySelector('.search-container');
+    const option = Array.from(defaultSearchProviderSelect.options).find(opt => opt.value === e.target.value);
+    form.action = option.dataset.url || `https://${e.target.value}.com/search`;
+    document.querySelector('.search-bar').placeholder = `Search with ${e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)}...`;
+    localStorage.setItem('defaultSearchProvider', e.target.value);
+});
+
+const savedSearchProvider = localStorage.getItem('defaultSearchProvider') || 'duckduckgo';
+defaultSearchProviderSelect.value = savedSearchProvider;
+defaultSearchProviderSelect.dispatchEvent(new Event('change'));
+
+// Add Icon functionality
+const addIconBtn = document.getElementById('addIconBtn');
+const addIconForm = document.getElementById('addIconForm');
+const siteNameInput = document.getElementById('siteName');
+const siteUrlInput = document.getElementById('siteUrl');
+const saveIconBtn = document.getElementById('saveIconBtn');
+
+addIconBtn.addEventListener('click', () => {
+    addIconForm.style.display = 'block';
+});
+
+saveIconBtn.addEventListener('click', () => {
+    const name = siteNameInput.value.trim();
+    const url = siteUrlInput.value.trim();
+    if (name && url) {
+        savedIcons.push({ name, url });
+        localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
+        loadIcons();
+        siteNameInput.value = '';
+        siteUrlInput.value = '';
+        addIconForm.style.display = 'none';
+    }
+});
+
+// Remove Icons functionality
+const removeIconsBtn = document.getElementById('removeIconsBtn');
+removeIconsBtn.addEventListener('click', () => {
+    savedIcons = [];
+    localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
+    loadIcons();
+});
