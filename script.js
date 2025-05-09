@@ -170,7 +170,7 @@ defaultSearchProviderSelect.addEventListener('change', (e) => {
     }
 });
 
-// Tool list with favicons
+// Tool list with favicons and context menu for removal
 const predefinedTools = [
     { name: "YouTube", url: "https://youtube.com" },
     { name: "Reddit", url: "https://reddit.com" },
@@ -182,10 +182,11 @@ const predefinedTools = [
 
 const toolsBar = document.getElementById('toolsBar');
 let savedIcons = JSON.parse(localStorage.getItem('savedIcons')) || [];
+let predefinedIcons = [...predefinedTools];
 
 function loadIcons() {
     toolsBar.innerHTML = '';
-    const allIcons = [...predefinedTools.map(tool => ({ ...tool, isPredefined: true })), ...savedIcons.map(icon => ({ ...icon, isPredefined: false }))];
+    const allIcons = [...predefinedIcons.map(tool => ({ ...tool, isPredefined: true })), ...savedIcons.map(icon => ({ ...icon, isPredefined: false }))];
     allIcons.forEach(icon => {
         const container = document.createElement('div');
         container.className = 'icon-container';
@@ -195,18 +196,56 @@ function loadIcons() {
         a.target = '_blank';
         a.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${new URL(icon.url).hostname}&sz=64" width="32" height="32" alt="${icon.name}" title="${icon.name}">`;
         container.appendChild(a);
-        if (!icon.isPredefined) {
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'delete-icon';
-            deleteBtn.innerHTML = 'x';
-            deleteBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                savedIcons = savedIcons.filter(i => i.name !== icon.name || i.url !== icon.url);
+
+        // Context menu for removal
+        const contextMenu = document.createElement('div');
+        contextMenu.className = 'context-menu';
+        contextMenu.innerHTML = '<button data-action="remove">Remove</button>';
+        document.body.appendChild(contextMenu);
+
+        let timer;
+        a.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const rect = a.getBoundingClientRect();
+            timer = setTimeout(() => {
+                contextMenu.style.display = 'block';
+                contextMenu.style.left = `${rect.left + window.scrollX}px`;
+                contextMenu.style.top = `${rect.bottom + window.scrollY}px`;
+                contextMenu.dataset.target = JSON.stringify(icon);
+            }, 500);
+        });
+        a.addEventListener('touchend', () => clearTimeout(timer));
+        a.addEventListener('touchcancel', () => clearTimeout(timer));
+        a.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const rect = a.getBoundingClientRect();
+            contextMenu.style.display = 'block';
+            contextMenu.style.left = `${e.pageX}px`;
+            contextMenu.style.top = `${e.pageY}px`;
+            contextMenu.dataset.target = JSON.stringify(icon);
+        });
+        a.addEventListener('click', (e) => {
+            if (contextMenu.style.display === 'block') e.preventDefault();
+        });
+
+        contextMenu.querySelector('button').addEventListener('click', () => {
+            const target = JSON.parse(contextMenu.dataset.target);
+            if (target.isPredefined) {
+                predefinedIcons = predefinedIcons.filter(i => i.name !== target.name || i.url !== target.url);
+            } else {
+                savedIcons = savedIcons.filter(i => i.name !== target.name || i.url !== target.url);
                 localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
-                loadIcons();
-            });
-            container.appendChild(deleteBtn);
-        }
+            }
+            contextMenu.style.display = 'none';
+            loadIcons();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!contextMenu.contains(e.target) && e.target !== a) {
+                contextMenu.style.display = 'none';
+            }
+        });
+
         toolsBar.appendChild(container);
     });
 
