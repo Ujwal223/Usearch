@@ -54,6 +54,29 @@ Make USearch the first thing you see when you open your browser! Follow these st
 Feel free to explore and contribute to the project under the license below! 😊
 
 ---
+
+
+### Explanation of Each features:
+
+
+
+- **🔍 Customizable Search Engine**  
+  Choose your default search engine (DuckDuckGo, Bing, Yahoo, Google, or add your own!) by clicking the logo in the search bar. Add custom search engines with a name, URL, and query parameter for a truly personalized experience.
+
+- **⚡ Quick Access Toolbar**  
+  Access your favorite sites in a snap with the quick access toolbar! It comes preloaded with popular sites like YouTube, Reddit, Twitter, StackOverflow, GitHub, and Facebook. You can:
+  - Add your own sites with the `+` button.
+  - Remove any site (even defaults) by long-pressing or right-clicking and selecting "Remove".
+
+- **🖌️ Theme Toggle**  
+  Switch between light and dark themes with a single click to match your vibe. Your preference is saved for future visits!
+
+- **🎨 Accent Color Customization**  
+  Pick your favorite accent color through the settings in the sidebar to make USearch truly yours.
+
+
+---
+
 I hope USearch brings a smile to your face every time you open your browser! If you have any questions (or just want to say hi), feel free to reach out. Happy searching! 🌟
 
 ---
