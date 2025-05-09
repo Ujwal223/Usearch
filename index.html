@@ -1,822 +1,336 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USearch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #121212;
             --text-color: #ffffff;
             --accent-color: #4CAF50;
-            --accent-light: #81C784;
+            --accent-hover: #66BB6A;
             --secondary-bg: #1e1e1e;
-            --border-color: #333333;
-            --shadow-color: rgba(0, 0, 0, 0.2);
+            --input-bg: #333;
+            --footer-color: #888;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+        }[data-theme="light"] {
+        --bg-color: #ffffff;
+        --text-color: #000000;
+        --accent-color: #388E3C;
+        --accent-hover: #4CAF50;
+        --secondary-bg: #f5f5f5;
+        --input-bg: #e0e0e0;
+        --footer-color: #666;
+        --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .header-icons {
+        display: flex;
+        gap: 20px;
+    }
+
+    .theme-toggle, .menu-toggle {
+        background: none;
+        border: none;
+        color: var(--text-color);
+        font-size: 24px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .theme-toggle:hover, .menu-toggle:hover {
+        transform: scale(1.1);
+    }
+
+    main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .mascot {
+        font-family: 'Pacifico', cursive;
+        font-size: 48px;
+        background: linear-gradient(135deg, var(--accent-color), #81C784);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        margin-bottom: 30px;
+    }
+
+    .search-container {
+        width: 50%;
+        max-width: 600px;
+        min-width: 300px;
+        position: relative;
+        margin-bottom: 40px;
+    }
+
+    .search-bar {
+        width: 100%;
+        padding: 12px 50px 12px 15px;
+        border-radius: var(--border-radius);
+        background-color: var(--input-bg);
+        border: 2px solid var(--accent-color);
+        color: var(--text-color);
+        font-size: 16px;
+        outline: none;
+    }
+
+    .search-button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 50px;
+        background-color: var(--accent-color);
+        border: none;
+        border-radius: 0 var(--border-radius) var(--border-radius) 0;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .search-button:hover {
+        background-color: var(--accent-hover);
+    }
+
+    .search-button, .search-button * {
+        touch-action: manipulation;
+    }
+
+    .search-button {
+        -webkit-touch-callout: none;
+    }
+
+    .search-engine-dropdown {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background-color: var(--secondary-bg);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        width: 180px;
+        overflow: hidden;
+        z-index: 100;
+        display: none;
+    }
+
+    .search-engine-option {
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .search-engine-option:hover {
+        background-color: var(--accent-color);
+    }
+
+    .tools {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .tool-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: var(--input-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-color);
+        font-size: 24px;
+        text-decoration: none;
+        box-shadow: var(--box-shadow);
+        transition: transform 0.2s, background-color 0.2s;
+        cursor: pointer;
+    }
+
+    .tool-icon:hover {
+        transform: scale(1.1);
+        background-color: var(--accent-color);
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: -250px;
+        width: 250px;
+        height: 100%;
+        background-color: var(--secondary-bg);
+        padding: 70px 20px 20px;
+        box-shadow: var(--box-shadow);
+        transition: transform 0.3s;
+        overflow-y: auto;
+        z-index: 5;
+    }
+
+    .sidebar.active {
+        transform: translateX(-250px);
+    }
+
+    .sidebar h2 {
+        color: var(--text-color);
+        margin-bottom: 20px;
+    }
+
+    .color-picker {
+        margin: 20px 0;
+    }
+
+    .color-picker label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .color-picker input[type="color"] {
+        width: 100%;
+        height: 40px;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        background: none;
+    }
+
+    details {
+        margin-bottom: 15px;
+    }
+
+    summary {
+        cursor: pointer;
+        padding: 8px 0;
+        font-weight: bold;
+        border-bottom: 2px solid var(--accent-color);
+        outline: none;
+    }
+
+    .bookmark-list {
+        padding: 10px 0 10px 15px;
+    }
+
+    .bookmark-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .bookmark-item:hover {
+        color: var(--accent-color);
+    }
+
+    .add-new-btn {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+        transition: background-color 0.2s;
+    }
+
+    .add-new-btn:hover {
+        background-color: var(--accent-hover);
+    }
+
+    footer {
+        text-align: center;
+        padding: 20px;
+        color: var(--footer-color);
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .mascot {
+            font-size: 32px;
         }
 
-        body.light-theme {
-            --bg-color: #f5f5f5;
-            --text-color: #121212;
-            --secondary-bg: #ffffff;
-            --border-color: #e0e0e0;
-            --shadow-color: rgba(0, 0, 0, 0.1);
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            padding: 20px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Header with theme toggle and menu button */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 20px;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .theme-toggle {
-            cursor: pointer;
-            font-size: 24px;
-            background: none;
-            border: none;
-            color: var(--text-color);
-        }
-
-        .menu-toggle {
-            cursor: pointer;
-            font-size: 24px;
-            background: none;
-            border: none;
-            color: var(--text-color);
-        }
-
-        /* Main logo and search section */
-        .search-section {
-            text-align: center;
-            margin-bottom: 40px;
-            width: 100%;
-            max-width: 600px;
-        }
-
-        .logo {
-            font-family: 'Pacifico', cursive;
-            font-size: 48px;
-            background: linear-gradient(45deg, var(--accent-color), var(--accent-light));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
-            margin-bottom: 20px;
-        }
-
-        .search-form {
-            position: relative;
-            width: 100%;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 50px 12px 20px;
-            border-radius: 30px;
-            border: 2px solid var(--border-color);
-            background-color: var(--secondary-bg);
-            color: var(--text-color);
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
-        }
-
-        .search-button {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-        }
-
-        .search-button svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--text-color);
-        }
-
-        .search-engine-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-        }
-
-        .search-engine-dropdown {
-            position: absolute;
-            left: 15px;
-            top: 100%;
-            background-color: var(--secondary-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px var(--shadow-color);
-            z-index: 10;
-            overflow: hidden;
-            display: none;
-            width: 200px;
-            margin-top: 5px;
-        }
-
-        .search-engine-option {
-            padding: 10px 15px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .search-engine-option:hover {
-            background-color: rgba(76, 175, 80, 0.1);
-        }
-
-        .search-engine-option img {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Quick access icons */
-        .quick-access {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
-
-        .quick-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--secondary-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            position: relative;
-            box-shadow: 0 2px 5px var(--shadow-color);
-        }
-
-        .quick-icon:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px var(--shadow-color);
-        }
-
-        .quick-icon img {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-        }
-
-        .add-icon {
-            background-color: var(--accent-color);
-            color: white;
-            font-size: 24px;
-        }
-
-        .quick-icon .label {
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .quick-icon:hover .label {
-            opacity: 1;
-        }
-
-        /* Sidebar */
         .sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background-color: var(--secondary-bg);
-            box-shadow: -5px 0 15px var(--shadow-color);
-            padding: 20px;
-            overflow-y: auto;
-            transition: right 0.3s ease;
-            z-index: 1000;
+            width: 80%;
+            right: -80%;
         }
 
         .sidebar.active {
-            right: 0;
+            transform: translateX(-100%);
         }
+    }
+</style>
 
-        .sidebar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .close-sidebar {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .bookmark-group {
-            margin-bottom: 20px;
-        }
-
-        .group-header {
-            font-weight: 500;
-            margin-bottom: 10px;
-            color: var(--accent-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .bookmark-list {
-            list-style: none;
-        }
-
-        .bookmark-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 0;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            border-radius: 4px;
-            margin-bottom: 5px;
-        }
-
-        .bookmark-item:hover {
-            background-color: rgba(76, 175, 80, 0.1);
-        }
-
-        .bookmark-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-        }
-
-        .add-new-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            text-align: center;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.2s;
-        }
-
-        .add-new-btn:hover {
-            background-color: var(--accent-light);
-        }
-
-        /* Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
-        }
-
-        /* Responsive styles */
-        @media (max-width: 768px) {
-            .logo {
-                font-size: 32px;
-            }
-
-            .quick-icon {
-                width: 50px;
-                height: 50px;
-            }
-
-            .quick-icon img {
-                width: 25px;
-                height: 25px;
-            }
-
-            .search-section {
-                max-width: 90%;
-            }
-
-            .sidebar {
-                width: 80%;
-                right: -80%;
-            }
-        }
-
-        /* Quote styles */
-        .quote-container {
-            margin-top: 40px;
-            text-align: center;
-            max-width: 600px;
-            opacity: 0.8;
-        }
-
-        .quote-text {
-            font-style: italic;
-            margin-bottom: 10px;
-        }
-
-        .quote-author {
-            font-weight: 300;
-        }
-
-        /* Context menu */
-        .context-menu {
-            position: absolute;
-            background: var(--secondary-bg);
-            border-radius: 5px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-            display: none;
-            z-index: 1000;
-        }
-
-        .context-menu-option {
-            padding: 8px 15px;
-            cursor: pointer;
-        }
-
-        .context-menu-option:hover {
-            background-color: rgba(76, 175, 80, 0.1);
-        }
-    </style>
 </head>
 <body>
     <header>
-        <button class="theme-toggle" id="themeToggle">🌙</button>
-        <button class="menu-toggle" id="menuToggle">☰</button>
-    </header>
-
-    <div class="container">
-        <div class="search-section">
-            <h1 class="logo">USearch</h1>
-            <form id="searchForm" action="https://duckduckgo.com/" method="get" class="search-form">
-                <img src="https://duckduckgo.com/favicon.ico" alt="DuckDuckGo" id="searchEngineIcon" class="search-engine-icon">
-                <input type="text" name="q" placeholder="Search..." class="search-input" id="searchInput" autocomplete="off">
-                <button type="submit" class="search-button">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                    </svg>
-                </button>
-                <div class="search-engine-dropdown" id="searchEngineDropdown">
-                    <div class="search-engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/" data-param="q">
-                        <img src="https://duckduckgo.com/favicon.ico" alt="DuckDuckGo">
-                        <span>DuckDuckGo</span>
-                    </div>
-                    <div class="search-engine-option" data-engine="bing" data-url="https://www.bing.com/search" data-param="q">
-                        <img src="https://www.bing.com/favicon.ico" alt="Bing">
-                        <span>Bing</span>
-                    </div>
-                    <div class="search-engine-option" data-engine="yahoo" data-url="https://search.yahoo.com/search" data-param="p">
-                        <img src="https://search.yahoo.com/favicon.ico" alt="Yahoo">
-                        <span>Yahoo</span>
-                    </div>
-                    <div class="search-engine-option" id="customSearchOption">
-                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXItcGx1cyI+PGxpbmUgeDE9IjEyIiB5MT0iNSIgeDI9IjEyIiB5Mj0iMTkiPjwvbGluZT48bGluZSB4MT0iNSIgeTE9IjEyIiB4Mj0iMTkiIHkyPSIxMiI+PC9saW5lPjwvc3ZnPg==" alt="Add Custom">
-                        <span>Add Custom</span>
-                    </div>
-                </div>
-            </form>
+        <div class="header-icons">
+            <button class="theme-toggle" aria-label="Toggle theme">☀️</button>
+            <button class="menu-toggle" aria-label="Toggle sidebar">≡</button>
         </div>
-
-        <div class="quick-access" id="quickAccess">
-            <!-- Default quick access icons -->
-            <div class="quick-icon" data-url="https://github.com">
-                <img src="https://github.com/favicon.ico" alt="GitHub">
-                <span class="label">GitHub</span>
-            </div>
-            <div class="quick-icon" data-url="https://stackoverflow.com">
-                <img src="https://stackoverflow.com/favicon.ico" alt="Stack Overflow">
-                <span class="label">Stack Overflow</span>
-            </div>
-            <div class="quick-icon" data-url="https://wikipedia.org">
-                <img src="https://wikipedia.org/favicon.ico" alt="Wikipedia">
-                <span class="label">Wikipedia</span>
-            </div>
-            <div class="quick-icon" data-url="https://reddit.com">
-                <img src="https://www.reddit.com/favicon.ico" alt="Reddit">
-                <span class="label">Reddit</span>
-            </div>
-            <div class="quick-icon add-icon" id="addQuickIcon">
-                <span>+</span>
-                <span class="label">Add Site</span>
-            </div>
+    </header><main>
+    <div class="mascot">USearch</div>
+    
+    <form class="search-container" action="https://duckduckgo.com/" method="get">
+        <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo..." aria-label="Search input">
+        <button type="submit" class="search-button" aria-label="Search">🔍</button>
+        <div class="search-engine-dropdown">
+            <div class="search-engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/">DuckDuckGo</div>
+            <div class="search-engine-option" data-engine="bing" data-url="https://www.bing.com/search">Bing</div>
+            <div class="search-engine-option" data-engine="yahoo" data-url="https://search.yahoo.com/search">Yahoo</div>
         </div>
+    </form>
 
-        <div class="quote-container">
-            <p class="quote-text">亦恶亦怜皆成美，半生恶尽半生痴。</p>
-            <p class="quote-author">—— 「魔道祖师」</p>
-        </div>
-    </div>
+    <div class="tools">
+        <a href="https://mail.google.com" class="tool-icon" aria-label="Gmail">📧</a>
+        <a href="https://lens.google.com" class="tool-icon" aria-label="Google Lens">🔍</a>
+        <a href="https://facebook.com" class="tool-icon" aria-label="Facebook">👥</a>
+        <a href="https://search.google.com" class="tool-icon" aria-label="Search Console">🛠️</a>
+        <a href="https://blogger.com" class="tool-icon" aria-label="Blogger">📝</a>
+        <a href="https://github.com" class="tool-icon" aria-label="GitHub">💻</a>
+        <a href="#" class="tool-icon" aria-label="Bolt">⚡</a>
+        <a href="#" class="tool-icon" aria-label="Grok">🤖</a>
+        <a href="#" class="tool-icon`
 
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>Bookmarks</h2>
-            <button class="close-sidebar" id="closeSidebar">×</button>
-        </div>
-
-        <!-- Default bookmark groups -->
-        <div class="bookmark-group">
-            <div class="group-header">
-                <span>Development</span>
-            </div>
-            <ul class="bookmark-list">
-                <li class="bookmark-item" data-url="https://github.com">
-                    <img src="https://github.com/favicon.ico" alt="GitHub" class="bookmark-icon">
-                    <span>GitHub</span>
-                </li>
-                <li class="bookmark-item" data-url="https://stackoverflow.com">
-                    <img src="https://stackoverflow.com/favicon.ico" alt="Stack Overflow" class="bookmark-icon">
-                    <span>Stack Overflow</span>
-                </li>
-                <li class="bookmark-item" data-url="https://developer.mozilla.org">
-                    <img src="https://developer.mozilla.org/favicon.ico" alt="MDN" class="bookmark-icon">
-                    <span>MDN Web Docs</span>
-                </li>
-            </ul>
-        </div>
-
-        <div class="bookmark-group">
-            <div class="group-header">
-                <span>Social</span>
-            </div>
-            <ul class="bookmark-list">
-                <li class="bookmark-item" data-url="https://reddit.com">
-                    <img src="https://www.reddit.com/favicon.ico" alt="Reddit" class="bookmark-icon">
-                    <span>Reddit</span>
-                </li>
-                <li class="bookmark-item" data-url="https://twitter.com">
-                    <img src="https://twitter.com/favicon.ico" alt="Twitter" class="bookmark-icon">
-                    <span>Twitter</span>
-                </li>
-            </ul>
-        </div>
-
-        <div class="bookmark-group">
-            <div class="group-header">
-                <span>Entertainment</span>
-            </div>
-            <ul class="bookmark-list">
-                <li class="bookmark-item" data-url="https://youtube.com">
-                    <img src="https://youtube.com/favicon.ico" alt="YouTube" class="bookmark-icon">
-                    <span>YouTube</span>
-                </li>
-                <li class="bookmark-item" data-url="https://netflix.com">
-                    <img src="https://netflix.com/favicon.ico" alt="Netflix" class="bookmark-icon">
-                    <span>Netflix</span>
-                </li>
-            </ul>
-        </div>
-
-        <button class="add-new-btn" id="addNewBtn">Add Group/Link</button>
-    </div>
-
-    <div class="overlay" id="overlay"></div>
-    <div class="context-menu" id="contextMenu">
-        <div class="context-menu-option" id="editOption">Edit</div>
-        <div class="context-menu-option" id="removeOption">Remove</div>
-    </div>
-
-    <script>
-        // DOM Elements
-        const themeToggle = document.getElementById('themeToggle');
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const closeSidebar = document.getElementById('closeSidebar');
-        const overlay = document.getElementById('overlay');
-        const searchEngineIcon = document.getElementById('searchEngineIcon');
-        const searchEngineDropdown = document.getElementById('searchEngineDropdown');
-        const searchForm = document.getElementById('searchForm');
-        const quickAccess = document.getElementById('quickAccess');
-        const addQuickIcon = document.getElementById('addQuickIcon');
-        const addNewBtn = document.getElementById('addNewBtn');
-        const customSearchOption = document.getElementById('customSearchOption');
-        const contextMenu = document.getElementById('contextMenu');
-        
-        // Current search engine
-        let currentEngine = {
-            name: 'duckduckgo',
-            url: 'https://duckduckgo.com/',
-            paramName: 'q',
-            icon: 'https://duckduckgo.com/favicon.ico'
-        };
-
-        // Context menu target
-        let contextTarget = null;
-
-        // Load saved settings
-        function loadSettings() {
-            // Load theme preference
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-theme');
-                themeToggle.textContent = '☀️';
-            }
-
-            // Load search engine preference
-            const savedEngine = localStorage.getItem('searchEngine');
-            if (savedEngine) {
-                try {
-                    const engine = JSON.parse(savedEngine);
-                    currentEngine = engine;
-                    searchEngineIcon.src = engine.icon;
-                    searchForm.action = engine.url;
-                    searchForm.querySelector('input').name = engine.paramName;
-                } catch (e) {
-                    console.error('Error loading saved search engine:', e);
-                }
-            }
-
-            // Load quick access icons
-            const savedQuickAccess = localStorage.getItem('quickAccess');
-            if (savedQuickAccess) {
-                try {
-                    const quickAccessItems = JSON.parse(savedQuickAccess);
-                    
-                    // Clear default quick access icons except the add button
-                    Array.from(quickAccess.children).forEach(child => {
-                        if (!child.classList.contains('add-icon')) {
-                            quickAccess.removeChild(child);
-                        }
-                    });
-                    
-                    // Add saved quick access icons
-                    quickAccessItems.forEach(item => {
-                        const quickIcon = createQuickAccessIcon(item.name, item.url, item.favicon);
-                        quickAccess.insertBefore(quickIcon, addQuickIcon);
-                    });
-                } catch (e) {
-                    console.error('Error loading saved quick access icons:', e);
-                }
-            }
-
-            // Load bookmarks
-            const savedBookmarks = localStorage.getItem('bookmarks');
-            if (savedBookmarks) {
-                try {
-                    const bookmarkGroups = JSON.parse(savedBookmarks);
-                    
-                    // Clear default bookmark groups
-                    const existingGroups = document.querySelectorAll('.bookmark-group');
-                    existingGroups.forEach(group => {
-                        sidebar.removeChild(group);
-                    });
-                    
-                    // Add saved bookmark groups
-                    bookmarkGroups.forEach(group => {
-                        const bookmarkGroup = createBookmarkGroup(group.name);
-                        
-                        group.bookmarks.forEach(bookmark => {
-                            addBookmarkToGroup(bookmarkGroup, bookmark.name, bookmark.url, bookmark.favicon);
-                        });
-                        
-                        sidebar.insertBefore(bookmarkGroup, addNewBtn);
-                    });
-                } catch (e) {
-                    console.error('Error loading saved bookmarks:', e);
-                }
-            }
-        }
-
-        // Save settings
-        function saveSettings() {
-            // Save theme preference
-            const theme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
-            localStorage.setItem('theme', theme);
-
-            // Save search engine preference
-            localStorage.setItem('searchEngine', JSON.stringify(currentEngine));
-
-            // Save quick access icons
-            const quickAccessItems = [];
-            Array.from(quickAccess.children).forEach(child => {
-                if (!child.classList.contains('add-icon')) {
-                    quickAccessItems.push({
-                        name: child.querySelector('.label').textContent,
-                        url: child.dataset.url,
-                        favicon: child.querySelector('img').src
-                    });
-                }
-            });
-            localStorage.setItem('quickAccess', JSON.stringify(quickAccessItems));
-
-            // Save bookmarks
-            const bookmarkGroups = [];
-            document.querySelectorAll('.bookmark-group').forEach(groupElement => {
-                const groupName = groupElement.querySelector('.group-header span').textContent;
-                const bookmarks = [];
-                
-                groupElement.querySelectorAll('.bookmark-item').forEach(item => {
-                    bookmarks.push({
-                        name: item.querySelector('span').textContent,
-                        url: item.dataset.url,
-                        favicon: item.querySelector('img').src
-                    });
-                });
-                
-                bookmarkGroups.push({
-                    name: groupName,
-                    bookmarks: bookmarks
-                });
-            });
-            localStorage.setItem('bookmarks', JSON.stringify(bookmarkGroups));
-        }
-
-        // Theme Toggle
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            themeToggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
-            saveSettings();
-        });
-
-        // Sidebar Toggle
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.add('active');
-            overlay.style.display = 'block';
-        });
-
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.style.display = 'none';
-        });
-
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('active');
-            overlay.style.display = 'none';
-            searchEngineDropdown.style.display = 'none';
-        });
-
-        // Search Engine Selection with long press
-        let pressTimer;
-        
-        searchEngineIcon.addEventListener('mousedown', () => {
-            pressTimer = window.setTimeout(() => {
-                searchEngineDropdown.style.display = 'block';
-            }, 500);
-        });
-
-        searchEngineIcon.addEventListener('mouseup', () => {
-            clearTimeout(pressTimer);
-        });
-
-        searchEngineIcon.addEventListener('mouseleave', () => {
-            clearTimeout(pressTimer);
-        });
-
-        // Handle search engine selection
-        document.querySelectorAll('.search-engine-option').forEach(option => {
-            if (option.id === 'customSearchOption') return;
-            
-            option.addEventListener('click', () => {
-                const engine = option.dataset.engine;
-                const url = option.dataset.url;
-                const paramName = option.dataset.param;
-                const icon = option.querySelector('img').src;
-                
-                currentEngine = {
-                    name: engine,
-                    url: url,
-                    paramName: paramName,
-                    icon: icon
-                };
-                
-                searchEngineIcon.src = icon;
-                searchForm.action = url;
-                searchForm.querySelector('input').name = paramName;
-                searchEngineDropdown.style.display = 'none';
-                
-                saveSettings();
-            });
-        });
-
-        // Custom search engine
-        customSearchOption.addEventListener('click', () => {
-            const name = prompt('Enter search engine name:');
-            if (!name) return;
-            
-            const url = prompt('Enter search URL (include https://):');
-            if (!url) return;
-            
-            const paramName = prompt('Enter search parameter name (usually "q" or "search"):');
-            if (!paramName) return;
-            
-            const faviconUrl = `${new URL(url).origin}/favicon.ico`;
-            
-            currentEngine = {
-                name: name.toLowerCase(),
-                url: url,
-                paramName: paramName,
-                icon: faviconUrl
-            };
-            
-            searchEngineIcon.src = faviconUrl;
-            searchForm.action = url;
-            searchForm.querySelector('input').name = paramName;
-            searchEngineDropdown.style.display = 'none';
-            
-            // Add to dropdown
-            const newOption = document.createElement('div');
-            newOption.className = 'search-engine-option';
-            newOption.dataset.engine = name.toLowerCase();
-            newOption.dataset.url = url;
-            newOption.dataset.param = paramName;
-            newOption.innerHTML = `
-                <img src="${faviconUrl}" alt="${name}">
-                <span>${name}</span>
-            `;
-            
-            newOption.addEventListener('click', () => {
-                currentEngine = {
-                    name: name.toLowerCase(),
-                    url: url,
-                    paramName: paramName,
-                    icon: faviconUrl
-                };
-                
-                searchEngineIcon.src = faviconUrl;
-                searchForm.action = url;
-                searchForm.querySelector('input').name = paramName;
-                searchEngineDropdown.style.display = 'none';
-                
-                saveSettings();
-            });
-            
-            searchEngineDropdown.insertBefore(newOption, customSearchOption);
-            saveSettings();
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!searchEngineDropdown.contains(e.target) && e.target !== searchEngineIcon) {
-                searchEngineDropdown.style.display = 'none';
-            }
-            
-            if (contextMenu.style.display === 'block' && !contextMenu.contains(e.target)) {
-                contextMenu.style.display = 'none';
-            }
-        });
-
-        // Create quick access icon
-        function createQuickAccessIcon(name, url, favicon) {
-            const quickIcon = document.createElement('div');
-            quickIcon.className = 'quick-icon';
-            quickIcon.dataset.url = url;
-            
-            const img = document.createElement('img');
-            img.src = favicon || `${new URL(url).origin}/favicon.ico`;
-            img.alt = name;
-            img.onerror = () => {
-                img.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0
