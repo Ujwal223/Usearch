@@ -178,28 +178,17 @@ main {
     transform: scale(1.2);
 }
 
-.delete-icon {
+.context-menu {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    background: var(--accent-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    font-size: 12px;
-    cursor: pointer;
-}
-
-.icon-menu {
     background-color: var(--secondary-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     z-index: 100;
+    display: none;
+    padding: 5px 0;
 }
 
-.menu-btn {
+.context-menu button {
     display: block;
     width: 100%;
     padding: 5px 10px;
@@ -210,7 +199,7 @@ main {
     cursor: pointer;
 }
 
-.menu-btn:hover {
+.context-menu button:hover {
     background-color: var(--accent-hover);
 }
 
