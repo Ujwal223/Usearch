@@ -17,20 +17,15 @@
         <div class="mascot">USearch</div>
         <form class="search-container" action="https://duckduckgo.com/" method="get">
             <div class="search-engine-toggle" id="searchEngineToggle">
-                <img src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=32" alt="DuckDuckGo">
+                <img id="searchEngineLogo" src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=32" alt="DuckDuckGo">
             </div>
             <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo...">
             <button type="submit" class="search-button" id="searchBtn"><i class="material-icons">search</i></button>
             <div class="search-engine-dropdown" id="engineDropdown" style="display: none;"></div>
         </form>
         <div class="tools" id="toolsBar"></div>
-        <div class="history-section">
-            <h3>Recent Searches</h3>
-            <div id="historyList"></div>
-            <button id="clearHistoryBtn">Clear History</button>
-        </div>
     </main>
-    <div class="sidebar" id="sidebar" style="display: none;">
+    <div class="sidebar" id="sidebar">
         <button class="close-btn" id="closeSidebarBtn"><i class="material-icons">close</i></button>
         <div class="sidebar-nav">
             <button class="nav-btn active" data-section="tools">Tools</button>
@@ -95,5 +90,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
-
