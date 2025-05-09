@@ -65,11 +65,42 @@ header {
     text-align: center;
     text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
     animation: glow 2s infinite alternate;
+    cursor: pointer;
+    position: relative;
 }
 
 @keyframes glow {
     from { text-shadow: 0 0 5px rgba(76, 175, 80, 0.5); }
     to { text-shadow: 0 0 15px rgba(76, 175, 80, 1); }
+}
+
+.logo-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--secondary-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 100px;
+    display: none;
+    z-index: 10;
+}
+
+.logo-dropdown .search-engine-option {
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.logo-dropdown .search-engine-option img {
+    width: 24px;
+    height: 24px;
+}
+
+.logo-dropdown .search-engine-option:hover {
+    background-color: var(--accent-hover);
 }
 
 main {
@@ -105,7 +136,6 @@ main {
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
 }
 
 .search-engine-toggle img {
@@ -126,31 +156,7 @@ main {
 }
 
 .search-engine-dropdown {
-    position: absolute;
-    left: 0;
-    top: 100%;
-    background-color: var(--secondary-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow);
-    width: 100px;
     display: none;
-    z-index: 10;
-}
-
-.search-engine-option {
-    padding: 5px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.2s;
-}
-
-.search-engine-option img {
-    width: 24px;
-    height: 24px;
-}
-
-.search-engine-option:hover {
-    background-color: var(--accent-hover);
 }
 
 .tools {
@@ -313,16 +319,10 @@ main {
 .setting select, .setting input[type="color"], .setting button { width: 100%; padding: 8px; margin-top: 5px; border-radius: 5px; border: 1px solid var(--accent-color); background-color: var(--input-bg); color: var(--text-color); }
 .setting button { background-color: var(--accent-color); border: none; cursor: pointer; }
 .setting button:hover { background-color: var(--accent-hover); }
-#iconList { margin: 10px 0; }
-#iconList .icon-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-#iconList .delete-icon { width: 20px; height: 20px; font-size: 14px; }
-#addIconForm, #addCustomSearchForm { margin-top: 10px; padding: 10px; background-color: var(--input-bg); border-radius: 5px; }
-#addIconForm input, #addCustomSearchForm input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 5px; border: 1px solid var(--accent-color); background-color: var(--bg-color); color: var(--text-color); }
-#addIconForm button, #addCustomSearchForm button { padding: 8px; }
 
 footer {
     text-align: center;
     padding: 20px;
     color: var(--footer-color);
     font-size: 14px;
-}
+    }
