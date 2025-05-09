@@ -60,7 +60,7 @@ header {
 .mascot {
     font-family: 'Pacifico', cursive;
     font-size: 48px;
-    color: #4CAF50; /* Fixed green color */
+    color: #4CAF50;
     margin-bottom: 20px;
     text-align: center;
     text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
@@ -78,7 +78,7 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 50px 0;
+    padding: 50px 20px;
 }
 
 .search-container {
@@ -90,12 +90,14 @@ main {
 
 .search-bar {
     width: 100%;
+    max-width: 600px;
     padding: 12px 40px 12px 40px;
     border-radius: var(--border-radius);
     background-color: var(--input-bg);
     border: 2px solid var(--accent-color);
     color: var(--text-color);
     font-size: 16px;
+    box-sizing: border-box;
 }
 
 .search-engine-toggle {
@@ -107,8 +109,8 @@ main {
 }
 
 .search-engine-toggle img {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
 }
 
 .search-button {
@@ -143,8 +145,8 @@ main {
 }
 
 .search-engine-option img {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
 }
 
 .search-engine-option:hover {
@@ -247,7 +249,7 @@ main {
 
 .sidebar.active { right: 0; }
 
-.closeeller {
+.close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
