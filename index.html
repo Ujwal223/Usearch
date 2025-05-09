@@ -2,492 +2,508 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Startup Page</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-/* Root and theme colors */
+:root {
+    --bg-color: #121212;
+    --bg-color-secondary: #1e1e1e;
+    --text-color: #e0e0e0;
+    --accent-color: #2196f3;
+}
 body {
     margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #111;
-    color: #ddd;
-    transition: background 0.3s, color 0.3s;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 body.light {
-    background: #eee;
-    color: #222;
+    --bg-color: #ffffff;
+    --bg-color-secondary: #f0f0f0;
+    --text-color: #000000;
 }
-main {
+#header {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    text-align: center;
-    padding: 1rem;
+    padding: 10px;
 }
-h2 {
-    margin-top: 1em;
-    font-weight: normal;
-}
-button {
-    cursor: pointer;
-    padding: 0.5em 1em;
-    margin: 0.2em;
+#toggleSidebar {
+    background: none;
     border: none;
-    background: #444;
-    color: #fff;
-    border-radius: 4px;
-    transition: background 0.2s;
-}
-body.light button {
-    background: #ccc;
-    color: #333;
-}
-button:hover {
-    background: #666;
-}
-body.light button:hover {
-    background: #aaa;
-}
-input, select {
-    padding: 0.5em;
-    margin: 0.2em;
-    font-size: 1em;
-    border: 1px solid #444;
-    border-radius: 4px;
-    background: #222;
-    color: #fff;
-    transition: background 0.3s, border-color 0.3s;
-}
-body.light input, body.light select {
-    background: #fff;
-    color: #000;
-    border: 1px solid #ccc;
-}
-input:focus, select:focus {
-    outline: none;
-    border-color: #29a;
-    box-shadow: 0 0 3px rgba(41, 128, 185, 0.5);
-}
-#search-form input {
-    width: 60vw;
-    max-width: 400px;
-}
-#search-form button {
-    background: #29a; 
-}
-body.light #search-form button {
-    background: #48a;
-    color: #fff;
-}
-#tools-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 1em;
-}
-.tool {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    margin: 0.5em;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    color: var(--text-color);
+    font-size: 24px;
     cursor: pointer;
+}
+#search-section {
+    margin: 20px auto;
+    text-align: center;
+}
+#searchForm {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--accent-color);
+    border-radius: 5px;
+    overflow: hidden;
+}
+#searchForm select, 
+#searchForm input[type="text"] {
+    padding: 10px;
+    border: none;
+    background: var(--bg-color-secondary);
+    color: var(--text-color);
+    font-size: 16px;
+    outline: none;
+}
+#searchForm select {
+    width: 120px;
+}
+#searchForm input {
+    flex: 1;
+    min-width: 100px;
+}
+#searchForm button {
+    padding: 10px;
+    border: none;
+    background: var(--accent-color);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+#searchForm button:hover {
+    opacity: 0.9;
+}
+#quickLinks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 20px;
+    padding: 10px;
+    margin: 20px;
+    justify-items: center;
+}
+.quick-item {
+    text-align: center;
+    text-decoration: none;
+    color: var(--accent-color);
+}
+.quick-item img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+}
+.quick-item .quick-label {
+    font-size: 14px;
+    color: var(--text-color);
+}
+.quick-item:hover {
+    transform: scale(1.1);
     transition: transform 0.2s;
 }
-.tool:hover {
-    transform: translateY(-5px);
+.quick-add {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-color-secondary);
+    color: var(--accent-color);
+    font-size: 32px;
+    cursor: pointer;
+    border: 2px dashed var(--accent-color);
+    border-radius: 8px;
+    transition: background 0.3s;
 }
-.tool img {
-    width: 32px;
-    height: 32px;
-    margin-bottom: 0.2em;
+.quick-add:hover {
+    background: var(--accent-color);
+    color: #fff;
 }
-.tool .label {
-    font-size: 0.8em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
-}
-.tool .remove {
-    position: absolute;
-    top: 0;
-    right: 5px;
-    font-size: 1em;
-    color: #f88;
-    display: none;
-}
-.tool:hover .remove {
-    display: block;
-}
-/* Sidebar styles */
 #sidebar {
     position: fixed;
     top: 0;
-    left: -250px;
-    width: 240px;
+    left: -260px;
+    width: 260px;
     height: 100%;
-    background: #222;
-    color: #fff;
-    padding: 1em;
-    box-sizing: border-box;
+    background: var(--bg-color-secondary);
+    padding: 10px 10px 50px 10px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
     transition: left 0.3s;
+    overflow-y: auto;
     z-index: 1000;
 }
 #sidebar.open {
     left: 0;
 }
-body.light #sidebar {
-    background: #ddd;
-    color: #000;
+.category {
+    margin-bottom: 20px;
 }
-#menu-btn {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    font-size: 1.5em;
-    background: none;
-    border: none;
-    color: inherit;
-    z-index: 1001;
-}
-#sidebar label {
+.category-header {
     display: flex;
     align-items: center;
-    margin: 0.5em 0;
-    font-size: 0.9em;
 }
-#sidebar label input {
-    margin-left: 0.5em;
-}
-footer {
-    margin-top: 2em;
-    font-size: 0.8em;
-}
-.hidden {
-    display: none;
-}
-/* Sidebar tools list */
-#sidebar-tools .tool {
-    width: 100%;
-    padding: 0.5em 0;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #444;
-}
-body.light #sidebar-tools .tool {
-    border-color: #aaa;
-}
-#sidebar-tools .tool img {
-    width: 16px;
-    height: 16px;
-    margin-right: 0.5em;
-}
-#sidebar-tools .tool .label {
+.category-header h3 {
+    margin: 0;
     flex-grow: 1;
-    text-align: left;
+    color: var(--text-color);
 }
-#sidebar-tools .tool .remove {
-    position: static;
-    margin-left: 0.5em;
-    font-size: 1.2em;
-    color: #f88;
-    display: inline-block;
+.add-link {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    line-height: 22px;
+    text-align: center;
+    cursor: pointer;
 }
-#sidebar-tools .tool:hover {
-    background: rgba(255,255,255,0.05);
+.links-list {
+    list-style: none;
+    padding-left: 10px;
+    margin: 5px 0;
 }
-/* Fallback for missing favicon */
-.tool img[src=""] {
-    background: #666;
+.links-list li {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+.links-list li a {
+    flex-grow: 1;
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 4px;
     border-radius: 4px;
+    transition: background 0.2s;
 }
-#sidebar-tools .tool img[src=""] {
-    background: #666;
+.links-list li a:hover {
+    background: var(--accent-color);
+    color: #fff;
+}
+.edit, .delete {
+    margin-left: 8px;
+    cursor: pointer;
+}
+.delete {
+    color: #e53935;
+}
+.settings {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+}
+.settings div {
+    margin: 10px 0;
+}
+.color-option {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.color-option.selected {
+    border: 2px solid var(--text-color);
+}
+#themeToggleLabel {
+    cursor: pointer;
+    font-size: 14px;
 }
 </style>
 </head>
 <body>
-    <button id="menu-btn">☰</button>
-    <nav id="sidebar">
-        <h2>Settings</h2>
-        <label>Light Mode:
-            <input type="checkbox" id="toggle-theme">
-        </label>
-        <label>Show Tools on Home:
-            <input type="checkbox" id="toggle-tools" checked>
-        </label>
-        <button id="reset-tools">Reset Tools</button>
-        <h2>Search Engines</h2>
-        <button id="add-search-engine">Add Engine</button>
-        <h2>Tools</h2>
-        <div id="sidebar-tools"></div>
-        <button id="add-tool">Add Tool</button>
-    </nav>
-    <main>
-        <div id="tools-container"></div>
-        <form id="search-form">
-            <select id="search-engine"></select>
-            <input type="search" id="search-input" placeholder="Search..." autocomplete="off">
-            <button type="submit">Go</button>
-        </form>
-        <footer>© 2023 Ujwal. All rights reserved.</footer>
-    </main>
+<div id="header">
+    <button id="toggleSidebar">&#9776;</button>
+</div>
+<div id="search-section">
+    <form id="searchForm" target="_blank">
+        <select id="searchEngineSelect">
+            <option value="DuckDuckGo">DuckDuckGo</option>
+            <option value="Google">Google</option>
+            <option value="Bing">Bing</option>
+            <option value="Yahoo">Yahoo</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="Search...">
+        <button type="submit" id="searchBtn">Search</button>
+    </form>
+</div>
+<div id="quickLinks">
+    <!-- Quick access icons will be inserted here -->
+</div>
+<div id="sidebar">
+    <!-- Categories -->
+    <div id="categoriesContainer"></div>
+    <!-- Settings -->
+    <div class="settings">
+        <div>
+            <label id="themeToggleLabel"><input type="checkbox" id="themeToggle"> Light Mode</label>
+        </div>
+        <div>
+            Accent Color:
+            <div id="accentColors">
+                <span class="color-option" data-color="#2196f3" style="background:#2196f3;"></span>
+                <span class="color-option" data-color="#e91e63" style="background:#e91e63;"></span>
+                <span class="color-option" data-color="#ff9800" style="background:#ff9800;"></span>
+                <span class="color-option" data-color="#4caf50" style="background:#4caf50;"></span>
+                <span class="color-option" data-color="#9c27b0" style="background:#9c27b0;"></span>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
-// Default lists
-const defaultTools = [
-    {name: "Google", url: "https://www.google.com"},
-    {name: "YouTube", url: "https://www.youtube.com"},
-    {name: "Wikipedia", url: "https://en.wikipedia.org"},
-    {name: "GitHub", url: "https://github.com"},
-    {name: "Reddit", url: "https://www.reddit.com"},
-    {name: "Amazon", url: "https://www.amazon.com"}
-];
-const defaultSearchEngines = [
-    {id: "duckduckgo", name: "DuckDuckGo", url: "https://duckduckgo.com/?q="},
-    {id: "google", name: "Google", url: "https://www.google.com/search?q="},
-    {id: "bing", name: "Bing", url: "https://www.bing.com/search?q="},
-    {id: "yahoo", name: "Yahoo", url: "https://search.yahoo.com/search?p="}
-];
-let tools = [], searchEngines = [], selectedEngineId = null;
-
-// Load settings on startup
-function loadSettings() {
-    // Theme
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    document.body.classList.toggle("light", savedTheme === "light");
-    document.getElementById("toggle-theme").checked = (savedTheme === "light");
-    // Tools toggle
-    const toolsOnMain = localStorage.getItem("toolsOnHomepage");
-    if (toolsOnMain === null) {
-        localStorage.setItem("toolsOnHomepage", "true");
-        document.getElementById("toggle-tools").checked = true;
-    } else {
-        document.getElementById("toggle-tools").checked = (toolsOnMain === "true");
+(function() {
+    // LocalStorage keys
+    const STORAGE_KEYS = {
+        quickLinks: 'quickLinks',
+        categories: 'categoriesLinks',
+        searchEngine: 'searchEngine',
+        theme: 'theme',
+        accent: 'accentColor'
+    };
+    // Default quick links
+    const defaultQuickLinks = [
+        { name: 'Gmail', url: 'https://mail.google.com' },
+        { name: 'Facebook', url: 'https://www.facebook.com' },
+        { name: 'YouTube', url: 'https://www.youtube.com' },
+        { name: 'GitHub', url: 'https://github.com' }
+    ];
+    // Default categories and links
+    const defaultCategories = {
+        'Emails': [
+            { name: 'Gmail', url: 'https://mail.google.com' },
+            { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' }
+        ],
+        'Social': [
+            { name: 'Facebook', url: 'https://www.facebook.com' },
+            { name: 'Twitter', url: 'https://www.twitter.com' }
+        ],
+        'Media': [
+            { name: 'YouTube', url: 'https://www.youtube.com' },
+            { name: 'Vimeo', url: 'https://vimeo.com' }
+        ],
+        'Shopping': [
+            { name: 'Amazon', url: 'https://www.amazon.com' },
+            { name: 'eBay', url: 'https://www.ebay.com' }
+        ],
+        'Design': [
+            { name: 'Dribbble', url: 'https://dribbble.com' },
+            { name: 'Behance', url: 'https://www.behance.net' }
+        ],
+        'Tools': [
+            { name: 'GitHub', url: 'https://github.com' },
+            { name: 'StackOverflow', url: 'https://stackoverflow.com' }
+        ]
+    };
+    // Initialize quick links
+    let quickLinks = JSON.parse(localStorage.getItem(STORAGE_KEYS.quickLinks) || 'null');
+    if (!quickLinks) {
+        quickLinks = defaultQuickLinks;
+        localStorage.setItem(STORAGE_KEYS.quickLinks, JSON.stringify(quickLinks));
     }
-    // Tools list
-    const toolsData = localStorage.getItem("tools");
-    if (toolsData) {
-        tools = JSON.parse(toolsData);
-    } else {
-        tools = defaultTools.slice();
-        localStorage.setItem("tools", JSON.stringify(tools));
+    // Initialize categories
+    let categories = JSON.parse(localStorage.getItem(STORAGE_KEYS.categories) || 'null');
+    if (!categories) {
+        categories = defaultCategories;
+        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories));
     }
-    // Search engines list
-    const seData = localStorage.getItem("searchEngines");
-    if (seData) {
-        searchEngines = JSON.parse(seData);
-    } else {
-        searchEngines = defaultSearchEngines.map(e => ({...e}));
-        localStorage.setItem("searchEngines", JSON.stringify(searchEngines));
+    // Apply saved theme
+    const savedTheme = localStorage.getItem(STORAGE_KEYS.theme) || 'dark';
+    if (savedTheme === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('themeToggle').checked = true;
     }
-    // Selected search engine
-    const savedEngine = localStorage.getItem("searchEngine");
-    selectedEngineId = savedEngine ? savedEngine : searchEngines[0].id;
-    // Populate engine selector
-    const select = document.getElementById("search-engine");
-    select.innerHTML = "";
-    searchEngines.forEach(engine => {
-        const opt = document.createElement("option");
-        opt.value = engine.id;
-        opt.textContent = engine.name;
-        select.appendChild(opt);
+    // Apply saved accent color
+    const savedAccent = localStorage.getItem(STORAGE_KEYS.accent);
+    if (savedAccent) {
+        document.documentElement.style.setProperty('--accent-color', savedAccent);
+    }
+    // Search engine configurations
+    const engines = {
+        'DuckDuckGo': { action: 'https://duckduckgo.com/', param: 'q', placeholder: 'Search DuckDuckGo...' },
+        'Google':    { action: 'https://www.google.com/search', param: 'q', placeholder: 'Search Google...' },
+        'Bing':      { action: 'https://www.bing.com/search', param: 'q', placeholder: 'Search Bing...' },
+        'Yahoo':     { action: 'https://search.yahoo.com/search', param: 'p', placeholder: 'Search Yahoo...' }
+    };
+    const searchForm = document.getElementById('searchForm');
+    const searchSelect = document.getElementById('searchEngineSelect');
+    const searchInput = document.getElementById('searchInput');
+    // Load saved search engine
+    const savedEngine = localStorage.getItem(STORAGE_KEYS.searchEngine) || 'Google';
+    searchSelect.value = savedEngine;
+    function setSearchEngine(engine) {
+        const config = engines[engine];
+        searchForm.action = config.action;
+        searchInput.name = config.param;
+        searchInput.placeholder = config.placeholder;
+        localStorage.setItem(STORAGE_KEYS.searchEngine, engine);
+    }
+    setSearchEngine(savedEngine);
+    searchSelect.addEventListener('change', () => {
+        setSearchEngine(searchSelect.value);
     });
-    select.value = selectedEngineId;
-}
-// Save helpers
-function saveTools() {
-    localStorage.setItem("tools", JSON.stringify(tools));
-}
-function saveSearchEngines() {
-    localStorage.setItem("searchEngines", JSON.stringify(searchEngines));
-}
-// Render tools on main
-function renderTools() {
-    const container = document.getElementById("tools-container");
-    container.innerHTML = "";
-    tools.forEach((tool, index) => {
-        const div = document.createElement("div");
-        div.className = "tool";
-        div.dataset.index = index;
-        const img = document.createElement("img");
-        img.alt = tool.name;
-        if (tool.iconData) {
-            img.src = tool.iconData;
-        } else {
-            const domain = new URL(tool.url).hostname;
-            fetch(`https://www.google.com/s2/favicons?domain=${domain}&sz=64`)
-            .then(resp => resp.blob())
-            .then(blob => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    tool.iconData = reader.result;
-                    localStorage.setItem("tools", JSON.stringify(tools));
-                    img.src = reader.result;
+    // Render quick links grid
+    const quickContainer = document.getElementById('quickLinks');
+    function renderQuickLinks() {
+        quickContainer.innerHTML = '';
+        quickLinks.forEach((link, index) => {
+            const a = document.createElement('a');
+            a.className = 'quick-item';
+            a.href = link.url;
+            a.target = '_blank';
+            let domain;
+            try {
+                const urlObj = new URL(link.url);
+                domain = urlObj.hostname;
+            } catch(e) {
+                domain = link.url;
+            }
+            const img = document.createElement('img');
+            img.src = 'https://www.google.com/s2/favicons?domain=' + domain;
+            img.alt = link.name;
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDU0OSA1NDkiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgPjxwYXRoIGQ9Ik00NzQuNyAyMTguNmMtMi43LTExLjUtMTYuNy0yOC4yLTI4LjYtMjYuNy0xMi45IDEuNS01MC41IDE0LjgtNjYuMSAzLjktMzIuNS0yNi41LTM3LjYtODAuNS0zNy42LTgwLjVhMTQwLjggMTQwLjggMCAwIDAtMS4yLTEyLjZjLTIuMS0xMi4zLTE3LjMtMzguOC0zOS4zLTM5LjQtMTkuNC0uNi0zNi43IDE3LjgtNDEuNyAzNi43Yy02LjUgMjAuOC0xNi44IDg4LjYtMTcuMiAxMDAuNS0uNyAyNC42IDkuNSAyNC4yLTEzLjQgMzkuNWEzOC4xIDM4LjEgMCAwIDAtMTkuNCA5LjkgMTkwLjYgMTkwLjYgMCAwIDAtMzkuMSAyLjdjMjEuMiAwIDMzLjUtMTcuMSAzNS40LTI4LjNjMS44LTEwLjYgOC42LTE3LjQgMTguNC0yMy41IDktNiAyMy40LTEzLjMgMzIuNC0yNS4yTDQ3NC43IDIxOC42WiIgZmlsbD0iI2VlZSIvPjwvc3ZnPg==';
+            };
+            a.appendChild(img);
+            const label = document.createElement('div');
+            label.className = 'quick-label';
+            label.textContent = link.name;
+            a.appendChild(label);
+            quickContainer.appendChild(a);
+        });
+        // Add button for new quick link
+        const addDiv = document.createElement('div');
+        addDiv.id = 'addQuick';
+        addDiv.className = 'quick-add';
+        addDiv.textContent = '+';
+        quickContainer.appendChild(addDiv);
+        addDiv.onclick = function() {
+            const name = prompt('Enter name for the new link:');
+            if (!name) return;
+            let url = prompt('Enter URL for ' + name + ':');
+            if (!url) return;
+            if (!/^https?:\\/\\//i.test(url)) {
+                url = 'http://' + url;
+            }
+            quickLinks.push({ name: name, url: url });
+            localStorage.setItem(STORAGE_KEYS.quickLinks, JSON.stringify(quickLinks));
+            renderQuickLinks();
+        };
+    }
+    renderQuickLinks();
+    // Sidebar toggle
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('toggleSidebar').addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+    });
+    // Render category links
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+        container.innerHTML = '';
+        Object.keys(categories).forEach(cat => {
+            const catDiv = document.createElement('div');
+            catDiv.className = 'category';
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'category-header';
+            const h3 = document.createElement('h3');
+            h3.textContent = cat;
+            headerDiv.appendChild(h3);
+            const addBtn = document.createElement('button');
+            addBtn.className = 'add-link';
+            addBtn.textContent = '+';
+            headerDiv.appendChild(addBtn);
+            catDiv.appendChild(headerDiv);
+            const ul = document.createElement('ul');
+            ul.className = 'links-list';
+            categories[cat].forEach((link, index) => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = '_blank';
+                a.textContent = link.name;
+                li.appendChild(a);
+                const edit = document.createElement('span');
+                edit.className = 'edit';
+                edit.textContent = '✎';
+                li.appendChild(edit);
+                const del = document.createElement('span');
+                del.className = 'delete';
+                del.textContent = '✖';
+                li.appendChild(del);
+                li.dataset.category = cat;
+                li.dataset.index = index;
+                ul.appendChild(li);
+                edit.onclick = function() {
+                    const catName = li.dataset.category;
+                    const idx = li.dataset.index;
+                    const newName = prompt('Edit name for this link:', categories[catName][idx].name);
+                    if (newName !== null) {
+                        let newUrl = prompt('Edit URL for ' + newName + ':', categories[catName][idx].url);
+                        if (newUrl) {
+                            if (!/^https?:\\/\\//i.test(newUrl)) {
+                                newUrl = 'http://' + newUrl;
+                            }
+                            categories[catName][idx] = { name: newName, url: newUrl };
+                            localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories));
+                            renderCategories();
+                        }
+                    }
                 };
-                reader.readAsDataURL(blob);
-            }).catch(()=>{
-                img.src = "";
-            });
-        }
-        div.appendChild(img);
-        const label = document.createElement("div");
-        label.className = "label";
-        label.textContent = tool.name;
-        div.appendChild(label);
-        const rem = document.createElement("div");
-        rem.className = "remove";
-        rem.textContent = "×";
-        rem.onclick = (e) => {
-            e.stopPropagation();
-            tools.splice(index, 1);
-            saveTools();
-            renderTools();
-        };
-        div.appendChild(rem);
-        div.onclick = () => {
-            window.open(tool.url, "_blank");
-        };
-        container.appendChild(div);
-    });
-    renderSidebarTools();
-}
-// Render tools in sidebar list
-function renderSidebarTools() {
-    const container = document.getElementById("sidebar-tools");
-    container.innerHTML = "";
-    tools.forEach((tool, index) => {
-        const div = document.createElement("div");
-        div.className = "tool";
-        div.dataset.index = index;
-        const img = document.createElement("img");
-        img.alt = tool.name;
-        if (tool.iconData) {
-            img.src = tool.iconData;
-        } else {
-            const domain = new URL(tool.url).hostname;
-            fetch(`https://www.google.com/s2/favicons?domain=${domain}`)
-            .then(resp => resp.blob())
-            .then(blob => {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    tool.iconData = reader.result;
-                    localStorage.setItem("tools", JSON.stringify(tools));
-                    img.src = reader.result;
+                del.onclick = function() {
+                    if (confirm('Delete this link?')) {
+                        const catName = li.dataset.category;
+                        const idx = li.dataset.index;
+                        categories[catName].splice(idx, 1);
+                        localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories));
+                        renderCategories();
+                    }
                 };
-                reader.readAsDataURL(blob);
-            }).catch(()=>{
-                img.src = "";
             });
+            catDiv.appendChild(ul);
+            addBtn.onclick = function() {
+                const newName = prompt('New link name:');
+                if (!newName) return;
+                let newUrl = prompt('New link URL for ' + newName + ':');
+                if (!newUrl) return;
+                if (!/^https?:\\/\\//i.test(newUrl)) {
+                    newUrl = 'http://' + newUrl;
+                }
+                categories[cat].push({ name: newName, url: newUrl });
+                localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(categories));
+                renderCategories();
+            };
+            container.appendChild(catDiv);
+        });
+    }
+    renderCategories();
+    // Theme toggle
+    document.getElementById('themeToggle').addEventListener('change', function() {
+        if (this.checked) {
+            document.body.classList.add('light');
+            localStorage.setItem(STORAGE_KEYS.theme, 'light');
+        } else {
+            document.body.classList.remove('light');
+            localStorage.setItem(STORAGE_KEYS.theme, 'dark');
         }
-        div.appendChild(img);
-        const label = document.createElement("div");
-        label.className = "label";
-        label.textContent = tool.name;
-        div.appendChild(label);
-        const rem = document.createElement("div");
-        rem.className = "remove";
-        rem.textContent = "×";
-        rem.onclick = (e) => {
-            e.stopPropagation();
-            tools.splice(index, 1);
-            saveTools();
-            renderTools();
-        };
-        div.appendChild(rem);
-        div.onclick = () => {
-            window.open(tool.url, "_blank");
-        };
-        container.appendChild(div);
     });
-}
-// Update tools display location
-function updateToolsDisplay() {
-    const show = document.getElementById("toggle-tools").checked;
-    const mainTools = document.getElementById("tools-container");
-    const sidebarTools = document.getElementById("sidebar-tools");
-    if (show) {
-        mainTools.classList.remove("hidden");
-        sidebarTools.classList.add("hidden");
-    } else {
-        mainTools.classList.add("hidden");
-        sidebarTools.classList.remove("hidden");
-    }
-    localStorage.setItem("toolsOnHomepage", show ? "true" : "false");
-}
-// Initialize
-loadSettings();
-renderTools();
-updateToolsDisplay();
-// Theme toggle event
-document.getElementById("toggle-theme").addEventListener("change", () => {
-    const isLight = document.getElementById("toggle-theme").checked;
-    document.body.classList.toggle("light", isLight);
-    document.body.classList.toggle("dark", !isLight);
-    localStorage.setItem("theme", isLight ? "light" : "dark");
-});
-// Tools location toggle
-document.getElementById("toggle-tools").addEventListener("change", () => {
-    updateToolsDisplay();
-});
-// Reset tools
-document.getElementById("reset-tools").onclick = () => {
-    if (confirm("Reset tools to default?")) {
-        tools = defaultTools.slice();
-        localStorage.setItem("tools", JSON.stringify(tools));
-        renderTools();
-    }
-};
-// Add new search engine
-document.getElementById("add-search-engine").addEventListener("click", () => {
-    const name = prompt("Search Engine Name:");
-    if (!name) return;
-    let url = prompt("Search URL (use {query} as placeholder):", "https://www.example.com/search?q={query}");
-    if (!url) return;
-    const id = name.toLowerCase().replace(/\s+/g, '');
-    searchEngines.push({id: id, name: name, url: url.replace('{query}','')});
-    saveSearchEngines();
-    const opt = document.createElement("option");
-    opt.value = id;
-    opt.textContent = name;
-    document.getElementById("search-engine").appendChild(opt);
-});
-// Add new tool
-document.getElementById("add-tool").addEventListener("click", () => {
-    const name = prompt("Tool name:");
-    if (!name) return;
-    const url = prompt("Tool URL (https://...):");
-    if (!url) return;
-    tools.push({name: name, url: url});
-    saveTools();
-    renderTools();
-});
-// Search form submission
-document.getElementById("search-form").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const query = document.getElementById("search-input").value.trim();
-    if (!query) return;
-    const engineId = document.getElementById("search-engine").value;
-    const engine = searchEngines.find(e=>e.id === engineId);
-    if (!engine) return;
-    const url = engine.url + encodeURIComponent(query);
-    window.location.href = url;
-    localStorage.setItem("searchEngine", engineId);
-});
-// Sidebar toggle button
-document.getElementById("menu-btn").onclick = () => {
-    document.getElementById("sidebar").classList.toggle("open");
-};
-// Disable context menu globally
-document.addEventListener("contextmenu", e => e.preventDefault());
+    // Accent color buttons
+    const colorOptions = document.querySelectorAll('.color-option');
+    colorOptions.forEach(option => {
+        const color = option.getAttribute('data-color');
+        option.style.backgroundColor = color;
+        let currentAccent = localStorage.getItem(STORAGE_KEYS.accent) || window.getComputedStyle(document.documentElement).getPropertyValue('--accent-color').trim();
+        if (color === currentAccent) {
+            option.classList.add('selected');
+        }
+        option.addEventListener('click', () => {
+            colorOptions.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            document.documentElement.style.setProperty('--accent-color', color);
+            localStorage.setItem(STORAGE_KEYS.accent, color);
+        });
+    });
+})();
 </script>
 </body>
-</html>
+                    </html>
