@@ -8,7 +8,7 @@ function setTheme(theme) {
     localStorage.setItem('theme', theme);
 }
 
-const savedTheme = localStorage.getItem('theme') || 'light'; // Default to light as per user request
+const savedTheme = localStorage.getItem('theme') || 'light';
 setTheme(savedTheme);
 
 themeBtn.addEventListener('click', () => {
@@ -56,7 +56,7 @@ navBtns.forEach(btn => {
 });
 
 // Search engine dropdown on DuckDuckGo logo click
-const searchEngineToggle = document.getElementById('searchEngineToggle');
+const searchEngineLogo = document.getElementById('searchEngineLogo');
 const engineDropdown = document.getElementById('engineDropdown');
 
 let searchEngines = [
@@ -87,7 +87,7 @@ function loadSearchEngines() {
             form.action = engine.url;
             form.querySelector('input').name = engine.query || 'q';
             document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
-            document.querySelector('.search-engine-toggle img').src = option.dataset.icon;
+            document.querySelector('#searchEngineLogo').src = option.dataset.icon;
             localStorage.setItem('defaultSearchEngine', engine.name);
             engineDropdown.style.display = 'none';
             defaultSearchProviderSelect.value = engine.name;
@@ -106,17 +106,18 @@ function loadSearchEngines() {
     form.action = selectedEngine.url;
     form.querySelector('input').name = selectedEngine.query || 'q';
     document.querySelector('.search-bar').placeholder = `Search with ${selectedEngine.name.charAt(0).toUpperCase() + selectedEngine.name.slice(1)}...`;
-    document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(selectedEngine.url).hostname}&sz=32`;
+    document.querySelector('#searchEngineLogo').src = `https://www.google.com/s2/favicons?domain=${new URL(selectedEngine.url).hostname}&sz=32`;
 }
 
 loadSearchEngines();
 
-searchEngineToggle.addEventListener('click', () => {
+searchEngineLogo.addEventListener('click', (e) => {
+    e.preventDefault();
     engineDropdown.style.display = engineDropdown.style.display === 'block' ? 'none' : 'block';
 });
 
 document.addEventListener('click', (e) => {
-    if (!engineDropdown.contains(e.target) && e.target !== searchEngineToggle) {
+    if (!engineDropdown.contains(e.target) && e.target !== searchEngineLogo) {
         engineDropdown.style.display = 'none';
     }
 });
@@ -138,7 +139,7 @@ saveCustomSearchBtn.addEventListener('click', () => {
     const url = customSearchUrlInput.value.trim();
     const query = customSearchQueryInput.value.trim() || 'q';
     try {
-        new URL(url); // Validate URL
+        new URL(url);
         if (name && url) {
             customEngines.push({ name, url, query });
             localStorage.setItem('customEngines', JSON.stringify(customEngines));
@@ -165,7 +166,7 @@ defaultSearchProviderSelect.addEventListener('change', (e) => {
         form.action = engine.url;
         form.querySelector('input').name = engine.query || 'q';
         document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
-        document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
+        document.querySelector('#searchEngineLogo').src = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
         localStorage.setItem('defaultSearchEngine', engine.name);
     }
 });
@@ -197,7 +198,6 @@ function loadIcons() {
         a.innerHTML = `<img src="https://www.google.com/s2/favicons?domain=${new URL(icon.url).hostname}&sz=64" width="32" height="32" alt="${icon.name}" title="${icon.name}">`;
         container.appendChild(a);
 
-        // Context menu for removal
         const contextMenu = document.createElement('div');
         contextMenu.className = 'context-menu';
         contextMenu.innerHTML = '<button data-action="remove">Remove</button>';
@@ -225,7 +225,9 @@ function loadIcons() {
             contextMenu.dataset.target = JSON.stringify(icon);
         });
         a.addEventListener('click', (e) => {
-            if (contextMenu.style.display === 'block') e.preventDefault();
+            if (contextMenu.style.display === 'block') {
+                e.preventDefault();
+            }
         });
 
         contextMenu.querySelector('button').addEventListener('click', () => {
@@ -254,9 +256,13 @@ function loadIcons() {
     addBtn.innerHTML = '+';
     addBtn.addEventListener('click', () => {
         const name = prompt('Enter site name:');
-        const url = prompt('Enter site URL:');
+        let url = prompt('Enter site URL:');
+        if (!url) return;
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
         try {
-            new URL(url); // Validate URL
+            new URL(url);
             if (name && url) {
                 savedIcons.push({ name, url });
                 localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
@@ -273,45 +279,14 @@ function loadIcons() {
 
 loadIcons();
 
-// History feature
-const historyList = document.getElementById('historyList');
-const clearHistoryBtn = document.getElementById('clearHistoryBtn');
-let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
-
-function loadHistory() {
-    historyList.innerHTML = '';
-    searchHistory.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.textContent = item;
-        historyList.appendChild(div);
-    });
-}
-
-function addToHistory(query) {
-    if (query && !searchHistory.includes(query)) {
-        searchHistory.unshift(query);
-        if (searchHistory.length > 5) searchHistory.pop(); // Limit to 5 recent searches
-        localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-        loadHistory();
-    }
-}
-
+// Search form submission
 document.querySelector('.search-container').addEventListener('submit', (e) => {
     e.preventDefault();
     const query = document.querySelector('.search-bar').value.trim();
     if (query) {
-        addToHistory(query);
         window.location.href = `${e.target.action}?${e.target.querySelector('input').name}=${encodeURIComponent(query)}`;
     }
 });
-
-clearHistoryBtn.addEventListener('click', () => {
-    searchHistory = [];
-    localStorage.removeItem('searchHistory');
-    loadHistory();
-});
-
-loadHistory();
 
 // Accent color picker
 const accentPicker = document.getElementById('accentColor');
