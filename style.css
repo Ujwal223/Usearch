@@ -105,12 +105,12 @@ main {
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
 }
 
 .search-engine-toggle img {
     width: 24px;
     height: 24px;
+    cursor: pointer;
 }
 
 .search-button {
@@ -231,14 +231,12 @@ main {
     background-color: var(--secondary-bg);
     padding: 20px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-    transition: right 0.3s;
+    transition: right 0.3s ease-in-out;
     z-index: 100;
-    display: none; /* Completely hidden by default */
 }
 
-.sidebar.active { 
+.sidebar.active {
     right: 0;
-    display: block; /* Show when active */
 }
 
 .close-btn {
@@ -250,6 +248,11 @@ main {
     color: var(--text-color);
     font-size: 24px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.close-btn:hover {
+    transform: scale(1.1);
 }
 
 .sidebar-nav {
@@ -268,7 +271,7 @@ main {
     font-size: 16px;
     cursor: pointer;
     padding: 5px 10px;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, border-bottom 0.2s;
 }
 
 .nav-btn.active {
@@ -280,10 +283,31 @@ main {
     opacity: 1;
 }
 
-.tool-category { margin-bottom: 20px; }
-.tool-category h3 { margin-bottom: 10px; padding: 5px 0; font-size: 18px; }
-.tool-category ul { list-style: none; padding: 0; margin: 0; }
-.tool-category li { margin-bottom: 10px; padding: 5px 0; }
+.sidebar-content {
+    padding-top: 10px;
+}
+
+.tool-category {
+    margin-bottom: 20px;
+}
+
+.tool-category h3 {
+    margin-bottom: 10px;
+    padding: 5px 0;
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.tool-category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tool-category li {
+    margin-bottom: 10px;
+    padding: 5px 0;
+}
 
 .tool-category a {
     display: flex;
@@ -300,9 +324,29 @@ main {
     background-color: rgba(76, 175, 80, 0.2);
 }
 
-.setting { margin-bottom: 20px; padding: 10px; border-radius: 5px; }
-.setting label { display: block; margin-bottom: 5px; font-size: 16px; }
-.setting select, .setting input[type="color"], .setting button, .setting input[type="text"] {
+.tool-category img {
+    width: 16px;
+    height: 16px;
+}
+
+.setting {
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.setting label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.setting select,
+.setting input[type="color"],
+.setting button,
+.setting input[type="text"] {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -311,26 +355,19 @@ main {
     background-color: var(--input-bg);
     color: var(--text-color);
     box-sizing: border-box;
+    font-size: 14px;
 }
-.setting button { background-color: var(--accent-color); border: none; cursor: pointer; }
-.setting button:hover { background-color: var(--accent-hover); }
 
-.history-section {
-    margin-top: 20px;
-    text-align: center;
-}
-.history-section h3 { margin-bottom: 10px; font-size: 18px; }
-#historyList { margin-bottom: 10px; }
-#historyList div { padding: 5px; }
-#clearHistoryBtn {
-    padding: 5px 10px;
+.setting button {
     background-color: var(--accent-color);
     border: none;
-    border-radius: 5px;
-    color: white;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
-#clearHistoryBtn:hover { background-color: var(--accent-hover); }
+
+.setting button:hover {
+    background-color: var(--accent-hover);
+}
 
 footer {
     text-align: center;
