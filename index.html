@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>USearch</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <header>
-        <button class="theme-toggle" id="themeToggleBtn">☀️</button>
+        <button class="theme-toggle" id="themeToggleBtn"><i class="material-icons">brightness_6</i></button>
         <div class="mascot">USearch</div>
-        <button class="menu-toggle" id="menuToggleBtn">≡</button>
+        <button class="menu-toggle" id="menuToggleBtn"><i class="material-icons">menu</i></button>
     </header>
     <main>
         <form class="search-container" action="https://duckduckgo.com/" method="get">
             <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo...">
-            <button type="submit" class="search-button" id="searchBtn">🔍</button>
+            <button type="submit" class="search-button" id="searchBtn"><i class="material-icons">search</i></button>
             <div class="search-engine-dropdown" id="engineDropdown">
                 <div class="search-engine-option" data-engine="duckduckgo" data-url="https://duckduckgo.com/">DuckDuckGo</div>
                 <div class="search-engine-option" data-engine="bing" data-url="https://www.bing.com/search">Bing</div>
@@ -26,15 +27,57 @@
         <div class="tools" id="toolsBar"></div>
     </main>
     <div class="sidebar" id="sidebar">
-        <h2>Tools</h2>
-        <div class="color-picker">
-            <label for="accentColor">Choose Accent Color:</label>
-            <input type="color" id="accentColor" name="accentColor" value="#888888">
+        <button class="close-btn" id="closeSidebarBtn"><i class="material-icons">close</i></button>
+        <div class="sidebar-nav">
+            <button class="nav-btn active" data-section="tools">Tools</button>
+            <button class="nav-btn" data-section="settings">Settings</button>
+        </div>
+        <div class="sidebar-content" id="toolsSection">
+            <h2>Tools</h2>
+            <div class="tool-category">
+                <h3>Social Media</h3>
+                <ul>
+                    <li><a href="https://reddit.com"><img src="https://www.google.com/s2/favicons?domain=reddit.com&sz=16"> Reddit</a></li>
+                    <li><a href="https://facebook.com"><img src="https://www.google.com/s2/favicons?domain=facebook.com&sz=16"> Facebook</a></li>
+                </ul>
+            </div>
+            <div class="tool-category">
+                <h3>Productivity</h3>
+                <ul>
+                    <li><a href="https://google.com/lens"><img src="https://www.google.com/s2/favicons?domain=google.com&sz=16"> Google Lens</a></li>
+                    <li><a href="https://blogger.com"><img src="https://www.google.com/s2/favicons?domain=blogger.com&sz=16"> Blogger</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="sidebar-content" id="settingsSection" style="display: none;">
+            <h2>Settings</h2>
+            <div class="setting">
+                <label for="accentColor">Accent Color:</label>
+                <input type="color" id="accentColor" name="accentColor" value="#888888">
+            </div>
+            <div class="setting">
+                <label>Default Search Provider:</label>
+                <select id="defaultSearchProvider">
+                    <option value="duckduckgo">DuckDuckGo</option>
+                    <option value="bing">Bing</option>
+                    <option value="yahoo">Yahoo</option>
+                </select>
+            </div>
+            <div class="setting">
+                <label>Default Theme:</label>
+                <select id="defaultTheme">
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                </select>
+            </div>
+            <div class="setting">
+                <label>Icons Below Search Bar:</label>
+                <div id="iconList"></div>
+                <button id="addIconBtn">Add Icon</button>
+            </div>
         </div>
     </div>
     <footer>© 2025 Ujwal. All rights reserved.</footer>
     <script src="script.js"></script>
 </body>
 </html>
-
-
