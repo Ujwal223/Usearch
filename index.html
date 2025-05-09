@@ -10,10 +10,10 @@
 <body>
     <header>
         <button class="theme-toggle" id="themeToggleBtn"><i class="material-icons">brightness_6</i></button>
-        <div class="mascot">USearch</div>
         <button class="menu-toggle" id="menuToggleBtn"><i class="material-icons">menu</i></button>
     </header>
     <main>
+        <div class="mascot"><i class="material-icons" style="color: #4CAF50;">search</i></div>
         <form class="search-container" action="https://duckduckgo.com/" method="get">
             <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo...">
             <button type="submit" class="search-button" id="searchBtn"><i class="material-icons">search</i></button>
@@ -74,6 +74,12 @@
                 <label>Icons Below Search Bar:</label>
                 <div id="iconList"></div>
                 <button id="addIconBtn">Add Icon</button>
+                <button id="removeIconsBtn">Remove All Icons</button>
+            </div>
+            <div id="addIconForm" style="display: none;">
+                <input type="text" id="siteName" placeholder="Site Name">
+                <input type="text" id="siteUrl" placeholder="Site URL">
+                <button id="saveIconBtn">Save</button>
             </div>
         </div>
     </div>
