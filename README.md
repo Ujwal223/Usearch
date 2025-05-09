@@ -37,12 +37,12 @@ Make USearch the first thing you see when you open your browser! Follow these st
  🦊 Firefox
 
 1. Open Firefox.
-2. Click the three-line menu (≡) in the top-right corner and select **Settings**.
-3. Go to the **Home** tab.
-4. Under **New Windows and Tabs**, find the **Homepage and new windows** dropdown.
-5. Select **Custom URLs**.
-6. Paste the URL: https://usearch.netlify.app/.
-7. Close the settings tab, and you're all set! 🎉
+2. Type about:config in the address bar
+3. Click "I'll be careful"
+4. Select browser.newtab.url
+5. Double click on that line 
+6. Change the value to https://usearch.netlify.app/
+
 
 ---
 ## 👨‍💻 Developer Information
