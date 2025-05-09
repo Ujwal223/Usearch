@@ -14,7 +14,7 @@
         <button class="menu-toggle" id="menuToggleBtn"><i class="material-icons">menu</i></button>
     </header>
     <main>
-        <div class="mascot">USearch</div>
+        <div class="mascot" id="logo">USearch</div>
         <form class="search-container" action="https://duckduckgo.com/" method="get">
             <div class="search-engine-toggle" id="searchEngineToggle">
                 <img src="https://www.google.com/s2/favicons?domain=duckduckgo.com&sz=32" alt="Search Engine">
@@ -22,6 +22,7 @@
             <input type="text" name="q" class="search-bar" placeholder="Search with DuckDuckGo...">
             <button type="submit" class="search-button" id="searchBtn"><i class="material-icons">search</i></button>
             <div class="search-engine-dropdown" id="engineDropdown"></div>
+            <div class="logo-dropdown" id="logoDropdown" style="display: none;"></div>
         </form>
         <div class="tools" id="toolsBar"></div>
     </main>
@@ -75,7 +76,6 @@
             <div id="addCustomSearchForm" style="display: none;">
                 <input type="text" id="customSearchName" placeholder="Name">
                 <input type="text" id="customSearchUrl" placeholder="Search URL (e.g., https://example.com/search)">
-                <input type="text" id="customSearchQuery" placeholder="Query Parameter (e.g., q)">
                 <button id="saveCustomSearchBtn">Save</button>
             </div>
             <div class="setting">
@@ -88,19 +88,8 @@
             <div class="setting">
                 <label>Add Icons From:</label>
                 <select id="addIconLocation">
-                    <option value="sidebar">Sidebar</option>
                     <option value="quickaccess">Quick Access</option>
                 </select>
-            </div>
-            <div class="setting" id="addIconSetting">
-                <label>Icons Below Search Bar:</label>
-                <div id="iconList"></div>
-                <button id="addIconBtn">Add Icon</button>
-            </div>
-            <div id="addIconForm" style="display: none;">
-                <input type="text" id="siteName" placeholder="Site Name">
-                <input type="text" id="siteUrl" placeholder="Site URL">
-                <button id="saveIconBtn">Save</button>
             </div>
         </div>
     </div>
@@ -108,3 +97,5 @@
     <script src="script.js"></script>
 </body>
 </html>
+
+Enter file contents here
