@@ -55,10 +55,9 @@ navBtns.forEach(btn => {
     });
 });
 
-// Search engine dropdown
-const searchBtn = document.getElementById('searchBtn');
-const searchEngineToggle = document.getElementById('searchEngineToggle');
-const engineDropdown = document.getElementById('engineDropdown');
+// Logo dropdown for search engines
+const logo = document.getElementById('logo');
+const logoDropdown = document.getElementById('logoDropdown');
 
 let searchEngines = [
     { name: "duckduckgo", url: "https://duckduckgo.com/", query: "q" },
@@ -70,27 +69,27 @@ const customEngines = JSON.parse(localStorage.getItem('customEngines')) || [];
 searchEngines = [...searchEngines, ...customEngines];
 
 function loadSearchEngines() {
-    engineDropdown.innerHTML = '';
+    logoDropdown.innerHTML = '';
     const defaultSearchProviderSelect = document.getElementById('defaultSearchProvider');
     defaultSearchProviderSelect.innerHTML = '';
     searchEngines.forEach(engine => {
-        // Dropdown for search bar
+        // Dropdown for logo
         const option = document.createElement('div');
         option.className = 'search-engine-option';
         option.dataset.engine = engine.name;
         option.dataset.url = engine.url;
-        option.dataset.query = engine.query;
+        option.dataset.query = engine.query || 'q'; // Default to 'q' if not specified
         option.dataset.icon = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
         option.innerHTML = `<img src="${option.dataset.icon}" alt="${engine.name}">`;
-        engineDropdown.appendChild(option);
+        logoDropdown.appendChild(option);
         option.addEventListener('click', () => {
             const form = document.querySelector('.search-container');
             form.action = engine.url;
-            form.querySelector('input').name = engine.query;
+            form.querySelector('input').name = engine.query || 'q';
             document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
             document.querySelector('.search-engine-toggle img').src = option.dataset.icon;
             localStorage.setItem('defaultSearchEngine', engine.name);
-            engineDropdown.style.display = 'none';
+            logoDropdown.style.display = 'none';
             defaultSearchProviderSelect.value = engine.name;
         });
 
@@ -106,25 +105,20 @@ function loadSearchEngines() {
     const selectedEngine = searchEngines.find(engine => engine.name === savedSearchEngine) || searchEngines[0];
     const form = document.querySelector('.search-container');
     form.action = selectedEngine.url;
-    form.querySelector('input').name = selectedEngine.query;
+    form.querySelector('input').name = selectedEngine.query || 'q';
     document.querySelector('.search-bar').placeholder = `Search with ${selectedEngine.name.charAt(0).toUpperCase() + selectedEngine.name.slice(1)}...`;
     document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(selectedEngine.url).hostname}&sz=32`;
 }
 
 loadSearchEngines();
 
-searchEngineToggle.addEventListener('click', () => {
-    engineDropdown.style.display = engineDropdown.style.display === 'block' ? 'none' : 'block';
-});
-
-searchBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.querySelector('.search-container').submit();
+logo.addEventListener('click', () => {
+    logoDropdown.style.display = logoDropdown.style.display === 'block' ? 'none' : 'block';
 });
 
 document.addEventListener('click', (e) => {
-    if (!engineDropdown.contains(e.target) && e.target !== searchEngineToggle) {
-        engineDropdown.style.display = 'none';
+    if (!logoDropdown.contains(e.target) && e.target !== logo) {
+        logoDropdown.style.display = 'none';
     }
 });
 
@@ -133,7 +127,6 @@ const addCustomSearchBtn = document.getElementById('addCustomSearchBtn');
 const addCustomSearchForm = document.getElementById('addCustomSearchForm');
 const customSearchNameInput = document.getElementById('customSearchName');
 const customSearchUrlInput = document.getElementById('customSearchUrl');
-const customSearchQueryInput = document.getElementById('customSearchQuery');
 const saveCustomSearchBtn = document.getElementById('saveCustomSearchBtn');
 
 addCustomSearchBtn.addEventListener('click', () => {
@@ -143,16 +136,14 @@ addCustomSearchBtn.addEventListener('click', () => {
 saveCustomSearchBtn.addEventListener('click', () => {
     const name = customSearchNameInput.value.trim().toLowerCase();
     const url = customSearchUrlInput.value.trim();
-    const query = customSearchQueryInput.value.trim();
-    if (name && url && query) {
-        customEngines.push({ name, url, query });
+    if (name && url) {
+        customEngines.push({ name, url, query: 'q' }); // Default query parameter 'q'
         localStorage.setItem('customEngines', JSON.stringify(customEngines));
         searchEngines = [...searchEngines.filter(e => !customEngines.some(ce => ce.name === e.name)), ...customEngines];
         loadSearchEngines();
         addCustomSearchForm.style.display = 'none';
         customSearchNameInput.value = '';
         customSearchUrlInput.value = '';
-        customSearchQueryInput.value = '';
     }
 });
 
@@ -163,7 +154,7 @@ defaultSearchProviderSelect.addEventListener('change', (e) => {
     if (engine) {
         const form = document.querySelector('.search-container');
         form.action = engine.url;
-        form.querySelector('input').name = engine.query;
+        form.querySelector('input').name = engine.query || 'q';
         document.querySelector('.search-bar').placeholder = `Search with ${engine.name.charAt(0).toUpperCase() + engine.name.slice(1)}...`;
         document.querySelector('.search-engine-toggle img').src = `https://www.google.com/s2/favicons?domain=${new URL(engine.url).hostname}&sz=32`;
         localStorage.setItem('defaultSearchEngine', engine.name);
@@ -183,7 +174,6 @@ const predefinedTools = [
 ];
 
 const toolsBar = document.getElementById('toolsBar');
-const iconList = document.getElementById('iconList');
 let savedIcons = JSON.parse(localStorage.getItem('savedIcons')) || [];
 
 function loadIcons() {
@@ -207,23 +197,13 @@ function loadIcons() {
                 savedIcons = savedIcons.filter(i => i.name !== icon.name || i.url !== icon.url);
                 localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
                 loadIcons();
-                loadIconList();
             });
             container.appendChild(deleteBtn);
-            let timer;
-            a.addEventListener('touchstart', (e) => {
-                timer = setTimeout(() => {
-                    const rect = a.getBoundingClientRect();
-                    showMenu(rect.left + window.scrollX, rect.bottom + window.scrollY, icon);
-                }, 500);
-            });
-            a.addEventListener('touchend', () => clearTimeout(timer));
-            a.addEventListener('touchcancel', () => clearTimeout(timer));
         }
         toolsBar.appendChild(container);
     });
 
-    const addIconLocation = localStorage.getItem('addIconLocation') || 'sidebar';
+    const addIconLocation = localStorage.getItem('addIconLocation') || 'quickaccess';
     if (addIconLocation === 'quickaccess') {
         const addBtn = document.createElement('button');
         addBtn.className = 'add-tool';
@@ -235,117 +215,13 @@ function loadIcons() {
                 savedIcons.push({ name, url });
                 localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
                 loadIcons();
-                loadIconList();
             }
         });
         toolsBar.appendChild(addBtn);
     }
 }
 
-function showMenu(x, y, icon) {
-    const menu = document.createElement('div');
-    menu.className = 'icon-menu';
-    menu.style.position = 'absolute';
-    menu.style.left = `${x}px`;
-    menu.style.top = `${y}px`;
-    menu.innerHTML = `
-        <button class="menu-btn" data-action="delete">Delete</button>
-        <button class="menu-btn" data-action="rename">Rename</button>
-        <button class="menu-btn" data-action="change-link">Change Link</button>
-    `;
-    document.body.appendChild(menu);
-    menu.querySelectorAll('.menu-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const action = btn.dataset.action;
-            if (action === 'delete') {
-                savedIcons = savedIcons.filter(i => i.name !== icon.name || i.url !== icon.url);
-                localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
-                loadIcons();
-                loadIconList();
-            } else if (action === 'rename') {
-                const newName = prompt('Enter new name:', icon.name);
-                if (newName) {
-                    const index = savedIcons.findIndex(i => i.name === icon.name && i.url === icon.url);
-                    savedIcons[index].name = newName;
-                    localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
-                    loadIcons();
-                    loadIconList();
-                }
-            } else if (action === 'change-link') {
-                const newUrl = prompt('Enter new URL:', icon.url);
-                if (newUrl) {
-                    const index = savedIcons.findIndex(i => i.name === icon.name && i.url === icon.url);
-                    savedIcons[index].url = newUrl;
-                    localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
-                    loadIcons();
-                    loadIconList();
-                }
-            }
-            menu.remove();
-        });
-    });
-    document.addEventListener('click', () => menu.remove(), { once: true });
-}
-
 loadIcons();
-
-// Add Icon functionality
-const addIconBtn = document.getElementById('addIconBtn');
-const addIconForm = document.getElementById('addIconForm');
-const siteNameInput = document.getElementById('siteName');
-const siteUrlInput = document.getElementById('siteUrl');
-const saveIconBtn = document.getElementById('saveIconBtn');
-
-function loadIconList() {
-    iconList.innerHTML = '';
-    savedIcons.forEach(icon => {
-        const div = document.createElement('div');
-        div.className = 'icon-item';
-        div.innerHTML = `
-            <span>${icon.name} (${icon.url})</span>
-            <button class="delete-icon">x</button>
-        `;
-        div.querySelector('.delete-icon').addEventListener('click', () => {
-            savedIcons = savedIcons.filter(i => i.name !== icon.name || i.url !== icon.url);
-            localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
-            loadIcons();
-            loadIconList();
-        });
-        iconList.appendChild(div);
-    });
-}
-
-loadIconList();
-
-addIconBtn.addEventListener('click', () => {
-    addIconForm.style.display = 'block';
-});
-
-saveIconBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const name = siteNameInput.value.trim();
-    const url = siteUrlInput.value.trim();
-    if (name && url) {
-        savedIcons.push({ name, url });
-        localStorage.setItem('savedIcons', JSON.stringify(savedIcons));
-        loadIcons();
-        loadIconList();
-        siteNameInput.value = '';
-        siteUrlInput.value = '';
-        addIconForm.style.display = 'none';
-    }
-});
-
-// Add Icon Location
-const addIconLocationSelect = document.getElementById('addIconLocation');
-const addIconSetting = document.getElementById('addIconSetting');
-addIconLocationSelect.value = localStorage.getItem('addIconLocation') || 'sidebar';
-addIconLocationSelect.addEventListener('change', (e) => {
-    localStorage.setItem('addIconLocation', e.target.value);
-    addIconSetting.style.display = e.target.value === 'sidebar' ? 'block' : 'none';
-    loadIcons();
-});
-addIconSetting.style.display = addIconLocationSelect.value === 'sidebar' ? 'block' : 'none';
 
 // Accent color picker
 const accentPicker = document.getElementById('accentColor');
