@@ -4,12 +4,11 @@ const htmlEl = document.documentElement;
 
 function setTheme(theme) {
     htmlEl.setAttribute('data-theme', theme);
-    themeBtn.textContent = theme === 'light' ? '☀️' : '🌙';
     localStorage.setItem('theme', theme);
 }
 
-const saved = localStorage.getItem('theme') || 'dark';
-setTheme(saved);
+const savedTheme = localStorage.getItem('theme') || 'dark';
+setTheme(savedTheme);
 
 themeBtn.addEventListener('click', () => {
     const current = htmlEl.getAttribute('data-theme');
@@ -18,10 +17,34 @@ themeBtn.addEventListener('click', () => {
 
 // Sidebar toggle
 const menuBtn = document.getElementById('menuToggleBtn');
+const closeBtn = document.getElementById('closeSidebarBtn');
 const sidebar = document.getElementById('sidebar');
 
 menuBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
+    sidebar.classList.add('active');
+});
+
+closeBtn.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+});
+
+// Sidebar navigation
+const navBtns = document.querySelectorAll('.nav-btn');
+const toolsSection = document.getElementById('toolsSection');
+const settingsSection = document.getElementById('settingsSection');
+
+navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        navBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (btn.dataset.section === 'tools') {
+            toolsSection.style.display = 'block';
+            settingsSection.style.display = 'none';
+        } else {
+            toolsSection.style.display = 'none';
+            settingsSection.style.display = 'block';
+        }
+    });
 });
 
 // Search engine dropdown
@@ -62,7 +85,6 @@ document.querySelectorAll('.search-engine-option').forEach(opt => {
             dropdown.style.display = 'none';
         });
     }
-    // Note: "Add Custom" functionality can be added here if specified
 });
 
 // Tool list with circular favicons and "Add" button
@@ -97,4 +119,10 @@ toolsBar.appendChild(addBtn);
 const accentPicker = document.getElementById('accentColor');
 accentPicker.addEventListener('input', (e) => {
     document.documentElement.style.setProperty('--accent-color', e.target.value);
+    localStorage.setItem('accentColor', e.target.value);
 });
+
+// Load saved accent color
+const savedAccentColor = localStorage.getItem('accentColor') || '#888888';
+document.documentElement.style.setProperty('--accent-color', savedAccentColor);
+accentPicker.value = savedAccentColor;
